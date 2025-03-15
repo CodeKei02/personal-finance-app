@@ -1,0 +1,23 @@
+[
+    {"id": 1, "name": "logo1", "src": "../images/avatars/aqua-flow-utilities.jpg"},
+    {"id": 2, "name": "logo2", "src": "../images/avatars/buzz-marketing-group.jpg"},
+    {"id": 3, "name": "logo3", "src": "../images/avatars/bytewise.jpg"},
+    {"id": 4, "name": "logo4", "src": "../images/avatars/daniel-carter.jpg"},
+    {"id": 5, "name": "logo5", "src": "../images/avatars/ecofuel-energy.jpg"},
+    {"id": 6, "name": "logo6", "src": "../images/avatars/elevate-education.jpg"},
+    {"id": 7, "name": "logo7", "src": "../images/avatars/ella-phillips.jpg"},
+    {"id": 8, "name": "logo8", "src": "../images/avatars/emma-richardson.jpg"},
+    {"id": 9, "name": "logo9", "src": "../images/avatars/ethan-clark.jpg"},
+    {"id": 10, "name": "logo10", "src": "../images/avatars/flavor-fiesta.jpg"},
+    {"id": 11, "name": "logo11", "src": "../images/avatars/green-plate-eatery.jpg"},
+    {"id": 12, "name": "logo12", "src": "../images/avatars/harper-edwards.jpg"},
+    {"id": 13, "name": "logo13", "src": "../images/avatars/james-thompson.jpg"},
+    {"id": 14, "name": "logo14", "src": "../images/avatars/liam-hughes.jpg"},
+    {"id": 15, "name": "logo15", "src": "../images/avatars/lily-ramirez.jpg"},
+    {"id": 16, "name": "logo16", "src": "../images/avatars/mason-martinez.jpg"},
+    {"id": 17, "name": "logo17", "src": "../images/avatars/nimbus-data-storage.jpg"},
+    {"id": 18, "name": "logo18", "src": "../images/avatars/pixel-playground.jpg"},
+    {"id": 19, "name": "logo19", "src": "../images/avatars/rina-sato.jpg"},
+    {"id": 20, "name": "logo20", "src": "../images/avatars/savory-bites-bistro.jpg"},
+    {"id": 21, "name": "logo21", "src": "../images/avatars/sebastian-cook.jpg"}
+]
