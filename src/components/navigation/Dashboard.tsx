@@ -59,6 +59,7 @@ const Sidebar = styled.aside<SidebarProps>`
         padding-left: 1.5rem;
         margin-top: 2rem; 
         display: block;
+        cursor: pointer;
       }
   }
 `;
@@ -220,13 +221,13 @@ export const Dashboard = () => {
   return (
     <Sidebar $isOpen={isOpen}>
       {!isOpen ?
-        <div className="logo logo--small">
+        <NavLink to="/overview" className="logo logo--small">
           <img src={logoSmall} alt="finance-logo" />
-        </div>
+        </NavLink>
         :
-        <div className="logo logo--large">
+        <NavLink to="/overview" className="logo logo--large">
           <img src={logoLarge} alt="finance-logo" />
-        </div>
+        </NavLink>
       }
 
       <List>

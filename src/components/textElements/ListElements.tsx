@@ -1,12 +1,8 @@
 import styled from "styled-components";
 import imageData from "../../images.json";
-import { breakpoints, colors, typography } from "../../styles/theme";
-import { prevPage, nextPage } from "../../store/slices/transactionsSlice";
-import { useEffect, useMemo, useState } from "react";
-import iconArrowLeft from "../../../public/images/icon-caret-left.svg"
-import iconArrowRight from "../../../public/images/icon-caret-right.svg"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { colors, typography } from "../../styles/theme";
+import { useEffect, useState } from "react";
+
 
 interface ListItem {
   transactionName: string;
@@ -16,7 +12,7 @@ interface ListItem {
 }
 
 interface ListElementsProps {
-  items: ListItem[][];
+  items: ListItem[];
 }
 
 const Table = styled.table`
@@ -81,65 +77,8 @@ const TextBold = styled.td`
   letter-spacing: ${typography.textPreset4Bold.letterSpacing};
   line-height: ${typography.textPreset4Bold.lineHeight};
   color: ${colors.greyDark};
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-
-  @media (min-width:${breakpoints.tablet}){
-    justify-content: space-between;
-  }
-`;
-
-const ButtonArrow = styled.button`
-  width: 60px;
-  height: 40px;
-  background: transparent;
-  border-radius: .5rem;
-  border: 1px solid ${colors.beigeNormal};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  cursor: pointer;
-  
-  img{
-    width: 1rem;
-    height: 1rem;
-  }
-
-  span{
-    font-size: ${typography.textPreset4.size};
-    display: none;
-  }
-
-  @media (min-width: ${breakpoints.tablet}){
-    width: 100px;
-    gap: 1rem;
-    
-    span{
-      display: flex;
-    }
-  }
-`;
-
-const ListNumbers = styled.ul`
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  
-  li{
-    width: 40px;
-    height: 40px;
-    padding: .5rem;
-    text-align: center;
-    border-radius: .5rem;
-    border: 1px solid ${colors.beigeNormal};
-  }
+  align-self: center;
+  justify-self: center;
 `;
 
 const Paragraph = styled.p`
@@ -155,10 +94,6 @@ const getRandomImage = (imageData: { src: string; name: string }[]) => {
 
 export const ListElements: React.FC<ListElementsProps> = ({ items }) => {
   const [selectedImage, setSelectedImage] = useState<{ src: string; name: string; } | null>(null);
-  const { currentList } = useSelector((state: RootState) => state.transactions);
-  const dispatch = useDispatch();
-  const transactions = items[currentList] || [];
-
 
   useEffect(() => {
     if (imageData.length > 0) {
@@ -178,8 +113,8 @@ export const ListElements: React.FC<ListElementsProps> = ({ items }) => {
           </Theadtr>
         </thead>
         <tbody>
-          {Array.isArray(items[currentList]) && items[currentList].length > 0 ? (
-            transactions.map((data, index) => (
+          {items.length > 0 ? (
+            items.map((data, index) => (
               <Tr key={index}>
                 <Td>
                   <div>
@@ -191,7 +126,9 @@ export const ListElements: React.FC<ListElementsProps> = ({ items }) => {
                 </Td>
                 <Text>{data.category}</Text>
                 <Text>{data.date}</Text>
-                <TextBold>${data.amount}</TextBold>
+                <TextBold>
+                  ${data.amount}
+                </TextBold>
               </Tr>
             ))
           ) : (
@@ -199,20 +136,6 @@ export const ListElements: React.FC<ListElementsProps> = ({ items }) => {
           )}
         </tbody>
       </Table>
-      <ButtonContainer>
-        <ButtonArrow onClick={() => dispatch(prevPage())}>
-          <img src={iconArrowLeft} alt="prev" />
-          <span>Prev</span>
-        </ButtonArrow>
-        <ListNumbers>
-          <li>{currentList + 1}</li>
-        </ListNumbers>
-        <ButtonArrow onClick={() => dispatch(nextPage())}>
-          <span>Next</span>
-          <img src={iconArrowRight} alt="next" />
-        </ButtonArrow>
-      </ButtonContainer>
     </>
-
   )
 }

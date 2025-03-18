@@ -13,8 +13,9 @@ interface IsOpenProps {
 
 const ContainerStyles = styled.section<IsOpenProps>`
     width: 100%;
-      padding: 1rem;
-      margin-bottom: 2rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    min-height: 100vh;
     
       @media (min-width: 786px) {
         margin-bottom: 3rem;

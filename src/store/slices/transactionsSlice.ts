@@ -9,16 +9,14 @@ interface Transaction {
 }
 
 interface TransactionsState {
-  transactions: Transaction[][];
-  currentList: number;
+  transactions: Transaction[];
   selectedCategory: string;
   selectedSearch: string;
   filterBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
 }
 
 const initialState: TransactionsState = {
-  transactions: [[]],
-  currentList: 0,
+  transactions: [],
   selectedCategory: 'All Transactions',
   selectedSearch: '',
   filterBy: 'Latest'
@@ -29,23 +27,7 @@ export const transactionsSlice = createSlice({
   initialState,
   reducers: {
     addTransactions: (state, action: PayloadAction<Transaction>) => {
-      const transactionLastList = state.transactions[state.transactions.length - 1];
-
-      if(transactionLastList.length < 11){
-        transactionLastList.push(action.payload);
-      }else{
-        state.transactions.push([action.payload]);
-      }
-    },
-    prevPage: (state) => {
-      if(state.currentList > 0){
-        state.currentList--;
-      }
-    },
-    nextPage: (state) => {
-      if(state.currentList < state.transactions.length - 1){
-        state.currentList++;
-      }
+      state.transactions.push(action.payload);
     },
     searchTransaction: (state, action: PayloadAction<string>) => {
       state.selectedSearch = action.payload;
@@ -59,4 +41,4 @@ export const transactionsSlice = createSlice({
   }
 });
 
-export const { addTransactions, prevPage, nextPage, filterByCategory, sortBy, searchTransaction } = transactionsSlice.actions;
+export const { addTransactions, filterByCategory, sortBy, searchTransaction } = transactionsSlice.actions;
