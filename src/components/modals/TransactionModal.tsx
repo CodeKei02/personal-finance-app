@@ -1,4 +1,3 @@
-//Este componente es para agregar una nueva transaction, componente creado por mi cuenta
 import { Form, Formik } from "formik";
 import { Input, Button, Calendar, Error } from "../form/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +16,6 @@ interface MyFormValues {
   amount: number;
   category: string;
   date: string;
-  value: string;
   recurring: boolean;
 }
 
@@ -35,16 +33,10 @@ const Span = styled.span`
   margin-bottom: 0.25rem;
 `;
 
-const Div = styled.div`
-  border: 1px solid ${colors.beigeNormal};
-  border-radius: .5rem;
-  display: flex;
-  justify-content: space-around;
-`;
 
 export const TransactionModal: React.FC = () => {
   const categories = ["Entertainment", "Bills", "Groceries", "Dining Out", "Transportation", "Personal Care", "Education"];
-  const initialValues: MyFormValues = { transactionName: "", amount: 0, category: "", recurring: false, date: "", value: "" };
+  const initialValues: MyFormValues = { transactionName: "", amount: 0, category: "", recurring: false, date: ""};
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement | null>(null);
@@ -65,7 +57,6 @@ export const TransactionModal: React.FC = () => {
             transactionName: values.transactionName,
             amount: values.amount,
             category: values.category,
-            value: values.value,
             date: values.date,
           };
 
@@ -106,29 +97,13 @@ export const TransactionModal: React.FC = () => {
               options={categories}
             />
 
-            <Input type="number" id="amount" label="Amount" name="amount" placeholder="e.g $1000" />
-            
-            <Div>
-              <Input 
-                id="income"
-                type="radio"
-                label="Income"
-                name="income"
-                placeholder=""
-                direction="row" 
-                marginleft=".5rem" 
-                
-              />
-              <Input 
-                id="expenses"
-                type="radio"
-                label="Expenses"
-                name="expenses"
-                placeholder=""
-                direction="row" 
-                marginleft=".5rem" 
-              />
-            </Div>
+            <Input 
+              type="number" 
+              id="amount" 
+              label="Amount" 
+              name="amount" 
+              placeholder="e.g $1000" 
+            />
 
             <Input 
               type="checkbox" 

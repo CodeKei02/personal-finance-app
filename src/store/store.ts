@@ -1,21 +1,27 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { transactionsSlice } from './slices/transactionsSlice'
-import { uiSlice } from './slices/uiSlice'
-import { loadState, saveState } from '../localstorage/index'
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // Usa LocalStorage
+import { rootReducer } from './reducers';
 
-const preloadedState = loadState();
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['transaction'],
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    transactions: transactionsSlice.reducer,
-    ui: uiSlice.reducer,
-  },
-  preloadedState,
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST']
+      }
+    })
 });
 
-store.subscribe(() => {
-  saveState(store.getState());
-});
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

@@ -145,7 +145,7 @@ export const TransactionsPage = () => {
   const transactionPerPage = 10;
   const categoryRef = useRef<HTMLDivElement | null>(null);
   const sortRef = useRef<HTMLDivElement | null>(null);
-  const { transactions } = useSelector((state: RootState) => state.transactions);
+  const { transactions } = useSelector((state: RootState) => state.transaction);
   const dispatch = useDispatch();
 
   const indexOfLastTransaction = currentPage * transactionPerPage;
