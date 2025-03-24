@@ -7,7 +7,7 @@ import { TransactionModal } from "../components/modals/index";
 import { useRef, useState } from "react";
 import { ListElements, Headline, Header, Container } from "../components/textElements/index"
 import { DropdownMobile } from "../components/dropdown/index";
-import { filterByCategory, sortBy, searchTransaction } from "../store/slices/transactionsSlice";
+import { filterByCategory, filterBy, searchTransaction } from "../store/slices/transactionsSlice";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { isOpenModal } from "../store/slices/uiSlice";
 import styled from "styled-components";
@@ -138,30 +138,58 @@ const ListNumbers = styled.ul`
 
 export const TransactionsPage = () => {
   const categories = ["All Transactions", "Entertainment", "Bills", "Groceries", "Dining Out", "Transportation", "Personal Care", "Education"];
-  const sortByFilter = ["Oldest", "A to Z", "Z to A", "Highest", "Lowest"];
+  const sortByFilter = [ "Latest", "Oldest", "A to Z", "Z to A", "Highest", "Lowest"];
   const [showCategory, setShowCategory] = useState(false);
   const [showSort, setShowSort] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const transactionPerPage = 10;
   const categoryRef = useRef<HTMLDivElement | null>(null);
   const sortRef = useRef<HTMLDivElement | null>(null);
-  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const { transactions, selectedCategory, selectedSearch, sortBy } = useSelector((state: RootState) => state.transaction);
   const dispatch = useDispatch();
 
   const indexOfLastTransaction = currentPage * transactionPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionPerPage;
   const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+  
+  const currentCategory = currentTransactions.filter((transaction) => selectedCategory === 'All Transactions' || transaction.category === selectedCategory)
+
+  const currentSearch = currentCategory.filter((transaction) => transaction.transactionName.toLowerCase().includes(selectedSearch.toLowerCase()));
+
+  const currentSort = currentSearch.sort((a, b) => {
+    switch(sortBy){
+      case "Latest": 
+        return a.date.localeCompare(b.date)
+
+      case "Oldest":
+        return b.date.localeCompare(a.date)
+
+      case "A to Z":
+        return a.transactionName.localeCompare(b.transactionName)
+        
+      case "Z to A":
+        return b.transactionName.localeCompare(a.transactionName)
+
+      case "Highest":
+        return Number(b.amount) - Number(a.amount)
+
+      case "Lowest":
+        return Number(a.amount) - Number(b.amount)
+    }
+  })
 
   const handleDropdown = (show: boolean, setShow: (status: boolean) => void): void => {
     setShow(!show);
   }
 
   const handlePrevPage = () => {
-    setCurrentPage((prev) => prev > 0 ? prev-- : prev = 0);
+    setCurrentPage((prev) => prev > 1 ? prev -= 1 : prev = 1);
   }
 
   const handleNextPage = () => {
-    setCurrentPage((next) => next++);
+    if(currentTransactions.length > 9){
+      setCurrentPage((next) => next += 1);
+    }
   }
 
   useClickOutside(categoryRef, () => setShowCategory(false));
@@ -215,7 +243,7 @@ export const TransactionsPage = () => {
                     }
                   </div>
                   <div ref={sortRef}>
-                    {showSort && <DropdownMobile text="Sort" items={sortByFilter} dispatchAction={(value) => sortBy(value)} />}
+                    {showSort && <DropdownMobile text="Sort" items={sortByFilter} dispatchAction={(value) => filterBy(value)} />}
                   </div>
 
                   <DropdownContainer>
@@ -226,7 +254,7 @@ export const TransactionsPage = () => {
                       name="sort"
                       placeholder="Select an option"
                       options={sortByFilter}
-                      dispatchAction={(value) => sortBy(value)}
+                      dispatchAction={(value) => filterBy(value)}
                     />
                     <Input
                       id="category"
@@ -267,7 +295,7 @@ export const TransactionsPage = () => {
             </Row>
           )
         }
-        <ListElements items={currentTransactions} />
+        <ListElements items={currentSort} />
 
         <ButtonContainer>
           <ButtonArrow onClick={handlePrevPage}>
@@ -275,7 +303,7 @@ export const TransactionsPage = () => {
             <span>Prev</span>
           </ButtonArrow>
           <ListNumbers>
-            <li>{ currentPage }</li>
+            <li>{currentPage}</li>
           </ListNumbers>
           <ButtonArrow onClick={handleNextPage}>
             <span>Next</span>
