@@ -4,7 +4,7 @@ import logoLarge from "../../../public/images/logo-large.svg"
 import iconArrow from "../../../public/images/icon-minimize-menu.svg"
 import styled from "styled-components"
 import { typography, colors, breakpoints } from "../../styles/theme"
-import dashboard from "./Dashboard.json";
+import dashboard from "./dashboard.json";
 import { useDispatch, useSelector } from "react-redux"
 import { toggleMenu } from "../../store/slices/uiSlice"
 import { RootState } from "../../store/store"
