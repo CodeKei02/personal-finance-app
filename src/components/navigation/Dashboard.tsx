@@ -221,11 +221,11 @@ export const Dashboard = () => {
   return (
     <Sidebar $isOpen={isOpen}>
       {!isOpen ?
-        <NavLink to="/overview" className="logo logo--small">
+        <NavLink to="/" className="logo logo--small">
           <img src={logoSmall} alt="finance-logo" />
         </NavLink>
         :
-        <NavLink to="/overview" className="logo logo--large">
+        <NavLink to="/" className="logo logo--large">
           <img src={logoLarge} alt="finance-logo" />
         </NavLink>
       }
