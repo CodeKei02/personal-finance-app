@@ -12,14 +12,14 @@ interface TransactionsState {
   transactions: Transaction[];
   selectedCategory: string;
   selectedSearch: string;
-  filterBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
+  sortBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
 }
 
 const initialState: TransactionsState = {
   transactions: [],
   selectedCategory: 'All Transactions',
   selectedSearch: '',
-  filterBy: 'Latest'
+  sortBy: 'Latest'
 };
 
 export const transactionsSlice = createSlice({
@@ -35,10 +35,10 @@ export const transactionsSlice = createSlice({
     filterByCategory: (state, action: PayloadAction<string>) => {
       state.selectedCategory = action.payload;
     },
-    sortBy: (state, action: PayloadAction<'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest'>) => {
-      state.filterBy = action.payload;
+    filterBy: (state, action: PayloadAction<'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest'>) => {
+      state.sortBy = action.payload;
     },
   }
 });
 
-export const { addTransactions, filterByCategory, sortBy, searchTransaction } = transactionsSlice.actions;
+export const { addTransactions, filterByCategory, filterBy, searchTransaction } = transactionsSlice.actions;
