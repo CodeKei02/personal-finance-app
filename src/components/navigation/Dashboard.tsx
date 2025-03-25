@@ -231,7 +231,7 @@ export const Dashboard = () => {
       }
 
       <List>
-        {dashboard.map((item) => (
+        {dashboard.map((item: {id: string, title: string, path: string, svgImage: string}) => (
           <StyledNavLink to={item.path} key={item.id} $isOpen={isOpen}>
             <div className="svgImage" dangerouslySetInnerHTML={{ __html: item.svgImage }} />
             <p>{item.title}</p>
