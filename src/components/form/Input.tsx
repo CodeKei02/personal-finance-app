@@ -7,10 +7,11 @@ import { useDispatch } from "react-redux";
 
 
 interface CustomInputProps {
-  id: string;
-  type: "text" | "number" | "search" | "checkbox" | "select" | "submit" | "radio";
-  name: string;
-  label: string;
+  id: string | any;
+  type: "text" | "number" | "search" | "checkbox" | "select" | "submit" | "radio" | any;
+  name: string | any;
+  label: string | any;
+  values?: string[];
   placeholder?: string;
   options?: string[];
   onChange?: (value: any) => void;
@@ -37,7 +38,7 @@ const InputStyled = styled(Field)`
   width: ${({ width = "auto" }) => width};
   padding: 12px 15px;
   border-radius: 8px;
-  border: ${({border = `1px solid ${colors.beigeNormal}`}) => border};
+  border: ${({ border = `1px solid ${colors.beigeNormal}` }) => border};
   color: ${colors.greyDark};
   margin-left: ${({ marginleft = "0rem" }) => marginleft};
 `;
@@ -45,7 +46,7 @@ const InputStyled = styled(Field)`
 const SelectStyled = styled(Field)`
   padding: 12px 20px;
   border-radius: 8px;
-  border: 1px solid ${colors.beigeNormal};
+  border: ${({ border = `1px solid ${colors.beigeNormal}` }) => border};
   color: ${colors.greyDark};
 `;
 
@@ -61,13 +62,16 @@ export const Input: React.FC<CustomInputProps> = ({
   width,
   border,
   onChange,
-  dispatchAction}) => {
+  dispatchAction }) => {
 
   const { setFieldValue } = useFormikContext();
   const dispatch = useDispatch();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const value = event.target.value;
+    let value: string | number = event.target.value;
+
+    if (type === "number" && value !== "") value = Number(value);
+
     setFieldValue(name, value);
 
     if (onChange) onChange(value);
@@ -79,43 +83,58 @@ export const Input: React.FC<CustomInputProps> = ({
       <Label text={label} />
 
       {type === "checkbox" ? (
-        <InputStyled
-          type="checkbox"
-          id={id}
-          name={name}
-          placeholder={placeholder}
-          marginleft={marginleft}
-          width={width}
-          onChange={handleChange}
-        />
+        <Field name={name}>
+          {({ field }: any) => (
+            <InputStyled
+              {...field}
+              type="checkbox"
+              id={id}
+              placeholder={placeholder}
+              marginleft={marginleft}
+              width={width}
+              onChange={handleChange}
+            />
+          )}
+        </Field>
       ) : type === "select" ? (
-        <SelectStyled
-          as="select" id={id}
-          name={name}
-          placeholder={placeholder}
-          onChange={handleChange}
-          marginleft={marginleft}
-          width={width} 
-          >
-          <option value="" disabled>{placeholder || "Select an option"}</option>
-          {options?.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
-          ))}
-        </ SelectStyled>
+        <Field name={name}>
+          {({ field }: any) => (
+            <SelectStyled
+              {...field}
+              as="select"
+              id={id}
+              placeholder={placeholder}
+              onChange={handleChange}
+              marginleft={marginleft}
+              width={width}
+              border={border}
+            >
+              <option value="" disabled>{placeholder || "Select an option"}</option>
+              {options?.map((option, index) => (
+                <option key={index} value={option}>{option}</option>
+              ))}
+            </SelectStyled>
+          )}
+        </Field>
       ) : (
-        <InputStyled
-          type={type}
-          id={id}
-          name={name}
-          placeholder={placeholder}
-          marginleft={marginleft}
-          width={width}
-          direction={direction}
-          onChange={handleChange}
-          border={border}
-        />
+        <Field name={name}>
+          {({ field }: any) => (
+            <InputStyled
+              {...field}
+              id={id}
+              type={type}
+              placeholder={placeholder}
+              marginleft={marginleft}
+              width={width}
+              direction={direction}
+              onChange={handleChange}
+              border={border}
+            />
+          )}
+        </Field>
       )}
       <Error name={name} />
     </Container>
+
   )
 }

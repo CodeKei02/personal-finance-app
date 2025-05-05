@@ -34,7 +34,7 @@ const Span = styled.span`
 `;
 
 
-export const TransactionModal: React.FC = () => {
+export const TransactionModal = () => {
   const categories = ["Entertainment", "Bills", "Groceries", "Dining Out", "Transportation", "Personal Care", "Education"];
   const initialValues: MyFormValues = { transactionName: "", amount: 0, category: "", recurring: false, date: ""};
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -55,7 +55,7 @@ export const TransactionModal: React.FC = () => {
           const newTransaction = {
             id: uuidv4(),
             transactionName: values.transactionName,
-            amount: values.amount,
+            amount: Number(values.amount),
             category: values.category,
             date: values.date,
           };

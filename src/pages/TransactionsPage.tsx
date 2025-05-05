@@ -6,7 +6,7 @@ import { breakpoints, colors, typography } from "../styles/theme/index";
 import { TransactionModal } from "../components/modals/index";
 import { useRef, useState } from "react";
 import { ListElements, Headline, Header, Container } from "../components/textElements/index"
-import { DropdownMobile } from "../components/dropdown/index";
+import { Dropdown } from "../components/dropdown/index";
 import { filterByCategory, filterBy, searchTransaction } from "../store/slices/transactionsSlice";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { isOpenModal } from "../store/slices/uiSlice";
@@ -138,7 +138,7 @@ const ListNumbers = styled.ul`
 
 export const TransactionsPage = () => {
   const categories = ["All Transactions", "Entertainment", "Bills", "Groceries", "Dining Out", "Transportation", "Personal Care", "Education"];
-  const sortByFilter = [ "Latest", "Oldest", "A to Z", "Z to A", "Highest", "Lowest"];
+  const sortByFilter = ["Latest", "Oldest", "A to Z", "Z to A", "Highest", "Lowest"];
   const [showCategory, setShowCategory] = useState(false);
   const [showSort, setShowSort] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -151,14 +151,14 @@ export const TransactionsPage = () => {
   const indexOfLastTransaction = currentPage * transactionPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionPerPage;
   const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
-  
+
   const currentCategory = currentTransactions.filter((transaction) => selectedCategory === 'All Transactions' || transaction.category === selectedCategory)
 
   const currentSearch = currentCategory.filter((transaction) => transaction.transactionName.toLowerCase().includes(selectedSearch.toLowerCase()));
 
   const currentSort = currentSearch.sort((a, b) => {
-    switch(sortBy){
-      case "Latest": 
+    switch (sortBy) {
+      case "Latest":
         return a.date.localeCompare(b.date)
 
       case "Oldest":
@@ -166,7 +166,7 @@ export const TransactionsPage = () => {
 
       case "A to Z":
         return a.transactionName.localeCompare(b.transactionName)
-        
+
       case "Z to A":
         return b.transactionName.localeCompare(a.transactionName)
 
@@ -187,7 +187,7 @@ export const TransactionsPage = () => {
   }
 
   const handleNextPage = () => {
-    if(currentTransactions.length > 9){
+    if (currentTransactions.length > 9) {
       setCurrentPage((next) => next += 1);
     }
   }
@@ -239,11 +239,11 @@ export const TransactionsPage = () => {
 
                   <div ref={categoryRef}>
                     {showCategory &&
-                      <DropdownMobile text="Category" items={categories} dispatchAction={(value) => filterByCategory(value)} />
+                      <Dropdown text="Category" items={categories} dispatchAction={(value) => filterByCategory(value)} />
                     }
                   </div>
                   <div ref={sortRef}>
-                    {showSort && <DropdownMobile text="Sort" items={sortByFilter} dispatchAction={(value) => filterBy(value)} />}
+                    {showSort && <Dropdown text="Sort" items={sortByFilter} dispatchAction={(value) => filterBy(value)} />}
                   </div>
 
                   <DropdownContainer>

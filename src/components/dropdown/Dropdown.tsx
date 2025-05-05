@@ -3,7 +3,7 @@ import { colors, typography } from "../../styles/theme";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
-interface DropdownMobileProps {
+interface DropdownProps {
     text: string;
     items: string[];
     dispatchAction: (value: any) => any;
@@ -40,10 +40,10 @@ const Button = styled.button`
     cursor: pointer;
 `;
 
-export const DropdownMobile: React.FC<DropdownMobileProps> = ({ text, items, dispatchAction }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ text, items, dispatchAction }) => {
     const [selected, setSelected] = useState(text);
     const dispatch = useDispatch();
-    
+
     const handleSelect = (value: string) => {
         setSelected(value)
         dispatch(dispatchAction(value));
@@ -52,9 +52,9 @@ export const DropdownMobile: React.FC<DropdownMobileProps> = ({ text, items, dis
         <Div>
             <Title>{selected}</Title>
             {items.map((item, index) => (
-               <Button key={index} onClick={() => handleSelect(item)} >{item}</Button>
+                <Button key={index} onClick={() => handleSelect(item)} >{item}</Button>
             ))}
         </Div>
     )
-    
+
 }

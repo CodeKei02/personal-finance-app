@@ -23,6 +23,7 @@ const Sidebar = styled.aside<SidebarProps>`
     background-color: ${colors.greyDark};
     position: fixed;
     bottom: 0;
+    z-index: 1000;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 

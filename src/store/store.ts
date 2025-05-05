@@ -6,19 +6,28 @@ import { rootReducer } from './reducers';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['transaction'],
-}
+  whitelist: ['transaction', 'budget', 'pot'],
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => 
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST']
-      }
-    })
+        ignoredActions: [
+          'persist/PERSIST',
+          'persist/REHYDRATE',
+          'persist/REGISTER',
+          'persist/FLUSH',
+          'persist/PAUSE',
+          'persist/PURGE',
+          'persist/DEFAULT',
+        ],
+        ignoredActionPaths: ['meta.arg', 'payload'], // opcionalmente para thunks
+      },
+    }),
 });
 
 export const persistor = persistStore(store);

@@ -26,5 +26,5 @@ export const uiSlice = createSlice({
   }
 });
 
-export const { toggleMenu, isCloseModal, isOpenModal } = uiSlice.actions;
+export const { toggleMenu, isCloseModal, isOpenModal} = uiSlice.actions;
 
