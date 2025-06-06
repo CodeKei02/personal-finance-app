@@ -13,6 +13,7 @@ interface ButtonProps {
   type?: string;
   disabled?: boolean;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 const StyledButton = styled.button<ButtonProps>`

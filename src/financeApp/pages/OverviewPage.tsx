@@ -308,13 +308,13 @@ export const OverviewPage = () => {
                 <div>
                   <Subtitle>Total Saved</Subtitle>
                   <h2 className="saved-amount">{`$${pots.reduce(
-                    (acc, item) => acc + item.amount,
+                    (acc: number, item: any) => acc + item.amount,
                     0
                   )}`}</h2>
                 </div>
               </div>
               <Grid className="potsLegend">
-                {pots.slice(0, 4).map((item) => (
+                {pots.slice(0, 4).map((item: any) => (
                   <ListPots key={item.id} border={item.theme}>
                     <div>
                       <Subtitle>{item.potName}</Subtitle>

@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface GenericState<T> {
-    items: T[];
-    selectedItem: T | null;
+    items: T[] | any;
+    selectedItem: T | null | any;
     isEditModalOpen: boolean;
     isCreateModalOpen: boolean;
     loading: boolean;

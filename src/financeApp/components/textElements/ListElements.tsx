@@ -13,7 +13,7 @@ interface ListItem {
 }
 
 interface ListElementsProps {
-  items: ListItem[];
+  items: ListItem[] | any;
   theader?: string[];
   isCategory?: boolean;
   isTheader?: boolean;
@@ -110,7 +110,7 @@ export const ListElements: React.FC<ListElementsProps> = ({
 
         <tbody>
           {items.length > 0 &&
-            items.map((data, index) => (
+            items.map((data: any, index: any) => (
               <Tr key={index} repeat={repeat}>
                 <Td>
                   <div>

@@ -7,6 +7,7 @@ import { updatePotItem } from "../../../store/slices/potsSlice";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { AppDispatch } from "../../../store/store";
 
 interface Pot {
   id: string;
@@ -66,7 +67,7 @@ export const PotActionModal: React.FC<PotActionModalProps> = ({
   onClose,
   selectedPot,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const initialValues: FormValues = { amount: 0 };
 
   const calculateNewAmount = (
