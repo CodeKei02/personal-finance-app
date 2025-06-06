@@ -1,11 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface Transaction {
   id: string;
-  transactionName: string;
-  amount: number;
-  date: string;
+  name: string;
   category: string;
+  amount: number | any;
+  date: string;
+  recurring: boolean;
+  transactiontype: string;
 }
 
 interface TransactionsState {
@@ -13,32 +15,58 @@ interface TransactionsState {
   selectedCategory: string;
   selectedSearch: string;
   sortBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
+  loading: boolean;
 }
 
 const initialState: TransactionsState = {
   transactions: [],
   selectedCategory: 'All Transactions',
   selectedSearch: '',
-  sortBy: 'Latest'
+  sortBy: 'Latest',
+  loading: false,
 };
 
-export const transactionsSlice = createSlice({
-  name: 'transactions',
-  initialState,
-  reducers: {
-    addTransactions: (state, action: PayloadAction<Transaction>) => {
-      state.transactions.push(action.payload);
-    },
-    searchTransaction: (state, action: PayloadAction<string>) => {
-      state.selectedSearch = action.payload;
-    },
-    filterByCategory: (state, action: PayloadAction<string>) => {
-      state.selectedCategory = action.payload;
-    },
-    filterBy: (state, action: PayloadAction<'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest'>) => {
-      state.sortBy = action.payload;
-    },
-  }
-});
+export const transactionsSlice = (sliceName: string) => {
+  const fetchTransactions = createAsyncThunk(
+    `${sliceName}/fetchTransactions`, 
+    async (): Promise<Transaction[]> => {
+      return [];
+    })
 
-export const { addTransactions, filterByCategory, filterBy, searchTransaction } = transactionsSlice.actions;
+    const slice = createSlice({
+      name: sliceName,
+      initialState,
+      reducers: {
+        addTransactions: (state, action: PayloadAction<Transaction>) => {
+          state.transactions.push(action.payload);
+        },
+        searchTransaction: (state, action: PayloadAction<string>) => {
+          state.selectedSearch = action.payload;
+        },
+        filterByCategory: (state, action: PayloadAction<string>) => {
+          state.selectedCategory = action.payload;
+        },
+        filterBy: (state, action: PayloadAction<'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest'>) => {
+          state.sortBy = action.payload;
+        },
+      },
+      extraReducers: (builder) => {
+        builder
+          .addCase(fetchTransactions.pending, (state) => {
+            state.loading = true;
+          })
+          .addCase(fetchTransactions.fulfilled, (state, action) => {
+            state.loading = false;
+            state.transactions = action.payload;
+          })
+      }
+    })
+
+    return {
+      ...slice,
+      fetchTransactions,
+    };
+}
+
+export const { addTransactions, filterByCategory, filterBy, searchTransaction } = transactionsSlice('transactions').actions;
+export default transactionsSlice('transactions').reducer;

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "108371",
+    "name": "Dentist",
+    "category": "Personal Care",
+    "date": "2025-01-01",
+    "amount": "-100.00",
+    "recurring": true,
+    "transactiontype": "expense"
+  },
+  {
+    "id": "237573",
+    "name": "Netflix",
+    "category": "Entertainment",
+    "date": "2025-02-15",
+    "amount": "-15.00",
+    "recurring": true,
+    "transactiontype": "expense"
+  },
+  {
+    "id": "634265",
+    "name": "Courses",
+    "category": "Education",
+    "date": "2025-03-20",
+    "amount": "100.00",
+    "recurring": true,
+    "transactiontype": "income"
+  },
+  {
+    "id": "372522",
+    "name": "Pizza",
+    "category": "Dining Out",
+    "date": "2025-03-15",
+    "amount": "-25.00",
+    "recurring": false,
+    "transactiontype": "expense"
+  },
+  {
+    "id": "239132",
+    "name": "Birthday",
+    "category": "Entertainment",
+    "date": "2025-05-10",
+    "amount": "-100.00",
+    "recurring": false,
+    "transactiontype": "expense"
+  }
+]

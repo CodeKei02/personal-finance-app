@@ -10,17 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.6.1",
-    "chart.js": "^4.4.8",
+    "@reduxjs/toolkit": "^2.8.1",
+    "chart.js": "^4.4.9",
+    "firebase": "11.8.0",
     "formik": "^2.4.6",
-    "react": "^18.3.1",
+    "react": "^19.1.0",
     "react-chartjs-2": "^5.3.0",
     "react-day-picker": "^9.5.1",
-    "react-dom": "^18.3.1",
-    "react-redux": "^9.2.0",
-    "react-router-dom": "^7.1.5",
-    "redux-persist": "^6.0.0",
-    "styled-components": "^6.1.15",
+    "react-dom": "^19.1.0",
+    "react-redux": "9.2.0",
+    "react-router-dom": "7.1.5",
+    "redux-persist": "6.0.0",
+    "styled-components": "^6.1.18",
     "uuid": "^11.1.0",
     "yup": "^1.6.1"
   },
@@ -42,5 +43,6 @@
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

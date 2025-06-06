@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Usa LocalStorage
+import storage from 'redux-persist/lib/storage'; 
 import { rootReducer } from './reducers';
 
 const persistConfig = {
@@ -25,7 +25,7 @@ export const store = configureStore({
           'persist/PURGE',
           'persist/DEFAULT',
         ],
-        ignoredActionPaths: ['meta.arg', 'payload'], // opcionalmente para thunks
+        ignoredActionPaths: ['meta.arg', 'payload'], 
       },
     }),
 });
