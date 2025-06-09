@@ -36,6 +36,7 @@ interface PlanModalProps<T> {
   validationSchema: Yup.ObjectSchema<any>;
   themeOptions?: ThemeOption[];
   showModal: boolean;
+  usedColors?: string[];
   onClose: () => void;
   onSubmitCallback?: (values: any) => T;
 }
@@ -112,6 +113,7 @@ export const PlanModal = <T extends { id: string }>({
   initialValues,
   validationSchema,
   showModal,
+  usedColors = [],
   onClose,
   onSubmitCallback,
 }: PlanModalProps<T>) => {
@@ -131,7 +133,10 @@ export const PlanModal = <T extends { id: string }>({
     { name: "Army Green", value: colors.armyGreen },
     { name: "Gold", value: colors.gold },
     { name: "Orange", value: colors.orange },
-  ];
+  ].map((theme) => ({
+    ...theme,
+    used: usedColors.includes(theme.value),
+  }));
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<ThemeOption | any>(
