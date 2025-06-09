@@ -10,10 +10,13 @@ import { colors, typography } from "../../styles/theme";
 import { PlanModal } from "../components/modals";
 import * as Yup from "yup";
 import { addPotItem } from "../../store/slices/potsSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 export const PotsPage = () => {
   const [openModal, setOpenModal] = useState(false);
-
+  const { items } = useSelector((state: RootState) => state.pot);
+  const usedColors = items.map((item: any) => item.theme);
   const inputsPots = [
     {
       id: "pot-name",
@@ -62,9 +65,9 @@ export const PotsPage = () => {
         initialValues={{ potName: "", target: 0, amount: 0 }}
         validationSchema={potValidationSchema}
         showModal={openModal}
+        usedColors={usedColors}
         onClose={() => setOpenModal(false)}
       />
-      <div></div>
       <PotsCard pots={inputsPots} validationSchema={potValidationSchema} />
     </Container>
   );

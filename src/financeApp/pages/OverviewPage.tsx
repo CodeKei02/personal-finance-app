@@ -18,6 +18,7 @@ import { Button } from "../../components/Button";
 import IconLogout from "../../../public/images/logout.png";
 import { onLogout } from "../../firebase/config";
 import { logout } from "../../store/auth";
+import { motion } from "framer-motion";
 
 const Details = styled.div`
   display: flex;
@@ -280,91 +281,98 @@ export const OverviewPage = () => {
         />
       </HeaderStyled>
 
-      <Details>
-        {details.map((detail, index) => (
-          <DetailsCard
-            key={index}
-            background={detail.background}
-            color={detail.color}
-          >
-            <p>{detail.title}</p>
-            <h2>{detail.amount}</h2>
-          </DetailsCard>
-        ))}
-      </Details>
-      <DestopkGrid>
-        <section className="column-1">
-          <Features className="pots">
-            <HeaderFeature>
-              <Title>Pots</Title>
-              <Link to="/finance/pots">
-                See Details <img src={arrow} alt="" />
-              </Link>
-            </HeaderFeature>
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Details>
+          {details.map((detail, index) => (
+            <DetailsCard
+              key={index}
+              background={detail.background}
+              color={detail.color}
+            >
+              <p>{detail.title}</p>
+              <h2>{detail.amount}</h2>
+            </DetailsCard>
+          ))}
+        </Details>
+        <DestopkGrid>
+          <section className="column-1">
+            <Features className="pots">
+              <HeaderFeature>
+                <Title>Pots</Title>
+                <Link to="/finance/pots">
+                  See Details <img src={arrow} alt="" />
+                </Link>
+              </HeaderFeature>
 
-            <Flex>
-              <div className="totalSavedPots">
-                <img src={iconPot} alt="Icon Pot Saved" />
-                <div>
-                  <Subtitle>Total Saved</Subtitle>
-                  <h2 className="saved-amount">{`$${pots.reduce(
-                    (acc: number, item: any) => acc + item.amount,
-                    0
-                  )}`}</h2>
+              <Flex>
+                <div className="totalSavedPots">
+                  <img src={iconPot} alt="Icon Pot Saved" />
+                  <div>
+                    <Subtitle>Total Saved</Subtitle>
+                    <h2 className="saved-amount">{`$${pots.reduce(
+                      (acc: number, item: any) => acc + item.amount,
+                      0
+                    )}`}</h2>
+                  </div>
                 </div>
-              </div>
-              <Grid className="potsLegend">
-                {pots.slice(0, 4).map((item: any) => (
-                  <ListPots key={item.id} border={item.theme}>
-                    <div>
-                      <Subtitle>{item.potName}</Subtitle>
-                      <strong>{`$${item.amount}`}</strong>
-                    </div>
-                  </ListPots>
-                ))}
-              </Grid>
-            </Flex>
-          </Features>
-          <Features className="transactions">
-            <HeaderFeature>
-              <Title>Transactions</Title>
-              <Link to="/finance/transactions">
-                See Details <img src={arrow} alt="Direct to transaction" />
-              </Link>
-            </HeaderFeature>
+                <Grid className="potsLegend">
+                  {pots.slice(0, 4).map((item: any) => (
+                    <ListPots key={item.id} border={item.theme}>
+                      <div>
+                        <Subtitle>{item.potName}</Subtitle>
+                        <strong>{`$${item.amount}`}</strong>
+                      </div>
+                    </ListPots>
+                  ))}
+                </Grid>
+              </Flex>
+            </Features>
+            <Features className="transactions">
+              <HeaderFeature>
+                <Title>Transactions</Title>
+                <Link to="/finance/transactions">
+                  See Details <img src={arrow} alt="Direct to transaction" />
+                </Link>
+              </HeaderFeature>
 
-            <ListElementsStyled items={transactions.slice(0, 8)} repeat="3" />
-          </Features>
-        </section>
-        <section className="column-2">
-          <Features className="budgets">
-            <HeaderFeature>
-              <Title>Budgets</Title>
-              <Link to="/finance/budgets">
-                See Details <img src={arrow} alt="Direct to budgets" />
-              </Link>
-            </HeaderFeature>
-            <Flex className="budgetChart">
-              <Chart items={budgets} transactions={transactions} />
-              <LegendContent
-                align="center"
-                title={false}
-                items={budgets.slice(0, 4)}
-                transactions={transactions}
-              />
-            </Flex>
-          </Features>
-          <Features className="bills">
-            <HeaderFeature>
-              <Title>Recurring Bills</Title>
-              <Link to="/finance/bills">
-                See Details <img src={arrow} alt="Direct to recurring Bills" />
-              </Link>
-            </HeaderFeature>
-            <Summary transactions={transactions} />
-          </Features>
-        </section>
-      </DestopkGrid>
+              <ListElementsStyled items={transactions.slice(0, 8)} repeat="3" />
+            </Features>
+          </section>
+          <section className="column-2">
+            <Features className="budgets">
+              <HeaderFeature>
+                <Title>Budgets</Title>
+                <Link to="/finance/budgets">
+                  See Details <img src={arrow} alt="Direct to budgets" />
+                </Link>
+              </HeaderFeature>
+              <Flex className="budgetChart">
+                <Chart items={budgets} transactions={transactions} />
+                <LegendContent
+                  align="center"
+                  title={false}
+                  items={budgets.slice(0, 4)}
+                  transactions={transactions}
+                />
+              </Flex>
+            </Features>
+            <Features className="bills">
+              <HeaderFeature>
+                <Title>Recurring Bills</Title>
+                <Link to="/finance/bills">
+                  See Details{" "}
+                  <img src={arrow} alt="Direct to recurring Bills" />
+                </Link>
+              </HeaderFeature>
+              <Summary transactions={transactions} />
+            </Features>
+          </section>
+        </DestopkGrid>
+      </motion.div>
     </Container>
   );
 };

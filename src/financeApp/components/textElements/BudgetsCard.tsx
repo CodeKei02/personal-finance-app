@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { RootState } from "../../../store/store";
 import { CardHeader } from "./index";
-
+import { Motion } from "./Motion";
 const ContainerCard = styled.div`
   display: flex;
   flex-direction: column;
@@ -170,97 +170,100 @@ export const BudgetsCard: React.FC<FormBudgets> = ({
   return (
     <ContainerCard className="card-container">
       {items.map((budget: any) => (
-        <Card key={budget.id} id={budget.id}>
-          <CardHeader
-            type={budget}
-            name={budget.category}
-            handleDropdownToggle={handleDropdownToggle}
-          />
-          <p className="paragraph">Maximum of ${budget.maximum.toFixed(2)}</p>
-          <div>
-            <div
-              style={{ backgroundColor: budget.theme }}
-              className="barra"
-            ></div>
-          </div>
-          <div className="barra-container">
-            <div
-              className="barra-horizontal"
-              style={{
-                backgroundColor: budget.theme,
-                width: `${Math.abs(budget.maximum)}px`,
-              }}
-            ></div>
-          </div>
-          <div className="card-content">
-            <div className="card-text">
-              <div
-                className="barra-vertical"
-                style={{ backgroundColor: budget.theme }}
-              ></div>
-              <div>
-                <p>Spent</p>
-                <strong>{totalSpentByCategory(budget)}$</strong>
-              </div>
-            </div>
-
-            <div className="card-text">
-              <div className="barra-vertical"></div>
-              <div>
-                <p>Free</p>
-                <strong>
-                  {budget.maximum - totalSpentByCategory(budget)}$
-                </strong>
-              </div>
-            </div>
-          </div>
-          <ListContainer>
-            <div className="list-header">
-              <p className="name">Latest Spending</p>
-              <Link to="/transactions">See All</Link>
-            </div>
-
-            <ul>
-              {transactions
-                .filter(
-                  (transaction: any) => transaction.category == budget.category
-                )
-                .slice(0, 3)
-                .map((transaction: any) => (
-                  <li key={transaction.id}>
-                    <div>
-                      <p>{transaction.name}</p>
-                      <ListContent>
-                        <strong> {transaction.amount}$ </strong>
-                        <span>{transaction.date}</span>
-                      </ListContent>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </ListContainer>
-
-          {dropdownId === budget.id && (
-            <DropdownEditDelete
-              method="budget"
-              name="Budget"
-              title="Edit Budget"
-              paragraph="As your budgets changes, feel free to update your spending limits"
-              category={budget.category}
-              item={budget.id}
-              onEdit={updateBudgetItem}
-              onDelete={() => deleteBudgetItem(budget.id)}
-              inputs={budgets}
-              initialValues={{
-                id: budget.id,
-                category: selectedItem?.category || "",
-                maximum: selectedItem?.maximum ?? 0,
-                theme: selectedItem?.theme,
-              }}
-              validationSchema={validationSchema}
+        <Motion key={budget.id} card={budget} index={budget.id}>
+          <Card key={budget.id} id={budget.id}>
+            <CardHeader
+              type={budget}
+              name={budget.category}
+              handleDropdownToggle={handleDropdownToggle}
             />
-          )}
-        </Card>
+            <p className="paragraph">Maximum of ${budget.maximum.toFixed(2)}</p>
+            <div>
+              <div
+                style={{ backgroundColor: budget.theme }}
+                className="barra"
+              ></div>
+            </div>
+            <div className="barra-container">
+              <div
+                className="barra-horizontal"
+                style={{
+                  backgroundColor: budget.theme,
+                  width: `${Math.abs(budget.maximum)}px`,
+                }}
+              ></div>
+            </div>
+            <div className="card-content">
+              <div className="card-text">
+                <div
+                  className="barra-vertical"
+                  style={{ backgroundColor: budget.theme }}
+                ></div>
+                <div>
+                  <p>Spent</p>
+                  <strong>{totalSpentByCategory(budget)}$</strong>
+                </div>
+              </div>
+
+              <div className="card-text">
+                <div className="barra-vertical"></div>
+                <div>
+                  <p>Free</p>
+                  <strong>
+                    {budget.maximum - totalSpentByCategory(budget)}$
+                  </strong>
+                </div>
+              </div>
+            </div>
+            <ListContainer>
+              <div className="list-header">
+                <p className="name">Latest Spending</p>
+                <Link to="/transactions">See All</Link>
+              </div>
+
+              <ul>
+                {transactions
+                  .filter(
+                    (transaction: any) =>
+                      transaction.category == budget.category
+                  )
+                  .slice(0, 3)
+                  .map((transaction: any) => (
+                    <li key={transaction.id}>
+                      <div>
+                        <p>{transaction.name}</p>
+                        <ListContent>
+                          <strong> {transaction.amount}$ </strong>
+                          <span>{transaction.date}</span>
+                        </ListContent>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </ListContainer>
+
+            {dropdownId === budget.id && (
+              <DropdownEditDelete
+                method="budget"
+                name="Budget"
+                title="Edit Budget"
+                paragraph="As your budgets changes, feel free to update your spending limits"
+                category={budget.category}
+                item={budget.id}
+                onEdit={updateBudgetItem}
+                onDelete={() => deleteBudgetItem(budget.id)}
+                inputs={budgets}
+                initialValues={{
+                  id: budget.id,
+                  category: selectedItem?.category || "",
+                  maximum: selectedItem?.maximum ?? 0,
+                  theme: selectedItem?.theme,
+                }}
+                validationSchema={validationSchema}
+              />
+            )}
+          </Card>
+        </Motion>
       ))}
     </ContainerCard>
   );

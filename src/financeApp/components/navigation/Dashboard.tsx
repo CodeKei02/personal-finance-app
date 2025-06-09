@@ -159,10 +159,6 @@ const StyledNavLink = styled(NavLink)`
     fill: ${colors.beigeNormal};
   }
 
-  path:hover {
-    fill: ${colors.white};
-  }
-
   @media (min-width: ${breakpoints.tablet}) {
     svg {
       width: 1rem;
@@ -185,6 +181,10 @@ const StyledNavLink = styled(NavLink)`
     svg {
       width: 1.5rem;
       height: 1.5rem;
+    }
+
+    path:hover {
+      fill: ${colors.armyGreen};
     }
 
     &.active {

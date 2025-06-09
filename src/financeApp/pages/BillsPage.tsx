@@ -21,7 +21,7 @@ import { Button } from "../../components";
 import iconSortMobile from "../../../public/images/icon-sort-mobile.svg";
 import { RootState } from "../../store/store";
 import { getRecurringData, getTotalAmount } from "../utils/billsUtils";
-
+import { motion } from "motion/react";
 const TotalBillsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -106,50 +106,56 @@ export const BillsPage = () => {
       <Header>
         <Headline title="Recurring Bills" />
       </Header>
-      <TotalBillsContainer>
-        <img src={imageBills} alt="icon-bills" />
-        <div>
-          <p>Total bills</p>
-          <p>${getTotalAmount(recurringBills)}</p>
-        </div>
-      </TotalBillsContainer>
-      <Summary transactions={transactions} />
-      <ListContainer>
-        <div>
-          <Formik
-            initialValues={{
-              search: "",
-              filter: "All",
-            }}
-            onSubmit={() => {}}
-          >
-            <ListElementsHeader
-              type="Bills"
-              dispatchSearch={(value) => dispatch(searchTransaction(value))}
-              dispatchFilter={(value) => dispatch(filterBy(value))}
-              showSort={showSort}
-              setShowSort={setShowSort}
-            />
-          </Formik>
-          <Button
-            children=""
-            background={`url("${iconSortMobile}") center no-repeat`}
-            color=""
-            weight=""
-            border="transparent"
-            size=""
-            width="auto"
-            display="none"
-            onClick={() => handleDropdown(showSort, setShowSort)}
-          ></Button>
-        </div>
-        <ListElements
-          items={currentSort}
-          theader={theader}
-          isTheader={true}
-          repeat="3"
-        />
-      </ListContainer>
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <TotalBillsContainer>
+          <img src={imageBills} alt="icon-bills" />
+          <div>
+            <p>Total bills</p>
+            <p>${getTotalAmount(recurringBills)}</p>
+          </div>
+        </TotalBillsContainer>
+        <Summary transactions={transactions} />
+        <ListContainer>
+          <div>
+            <Formik
+              initialValues={{
+                search: "",
+                filter: "All",
+              }}
+              onSubmit={() => {}}
+            >
+              <ListElementsHeader
+                type="Bills"
+                dispatchSearch={(value) => dispatch(searchTransaction(value))}
+                dispatchFilter={(value) => dispatch(filterBy(value))}
+                showSort={showSort}
+                setShowSort={setShowSort}
+              />
+            </Formik>
+            <Button
+              children=""
+              background={`url("${iconSortMobile}") center no-repeat`}
+              color=""
+              weight=""
+              border="transparent"
+              size=""
+              width="auto"
+              display="none"
+              onClick={() => handleDropdown(showSort, setShowSort)}
+            ></Button>
+          </div>
+          <ListElements
+            items={currentSort}
+            theader={theader}
+            isTheader={true}
+            repeat="3"
+          />
+        </ListContainer>
+      </motion.div>
     </Container>
   );
 };

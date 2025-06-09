@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { colors, typography } from "../../../styles/theme";
 import { Paragraph } from "./index";
+import { Motion } from "./Motion";
 
 interface ListItem {
   id: string;
@@ -110,21 +111,23 @@ export const ListElements: React.FC<ListElementsProps> = ({
 
         <tbody>
           {items.length > 0 &&
-            items.map((data: any, index: any) => (
-              <Tr key={index} repeat={repeat}>
-                <Td>
-                  <div>
-                    <strong>{data.name}</strong>
-                  </div>
-                </Td>
-                {isCategory && <Text>{data.category}</Text>}
-                <Text>{data.date}</Text>
+            items.map((data: any, index: number) => (
+              <Motion card={items} index={index} style={{ display: "block" }}>
+                <Tr key={index} repeat={repeat}>
+                  <Td>
+                    <div>
+                      <strong>{data.name}</strong>
+                    </div>
+                  </Td>
+                  {isCategory && <Text>{data.category}</Text>}
+                  <Text>{data.date}</Text>
 
-                <TextBold style={{ color: transactionType(data) }}>
-                  $ {data.transactiontype === "income" ? "+" : "-"}
-                  {Math.abs(data.amount).toFixed(2)}
-                </TextBold>
-              </Tr>
+                  <TextBold style={{ color: transactionType(data) }}>
+                    $ {data.transactiontype === "income" ? "+" : "-"}
+                    {Math.abs(data.amount).toFixed(2)}
+                  </TextBold>
+                </Tr>
+              </Motion>
             ))}
         </tbody>
       </Table>

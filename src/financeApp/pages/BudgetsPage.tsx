@@ -93,6 +93,7 @@ export const BudgetsPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const { items } = useSelector((state: RootState) => state.budget);
   const { transactions } = useSelector((state: RootState) => state.transaction);
+  const usedColors = items.map((item: any) => item.theme);
   return (
     <Container>
       <Header>
@@ -117,6 +118,7 @@ export const BudgetsPage = () => {
         initialValues={{ category: "", maximum: 0 }}
         validationSchema={budgetValidationSchema}
         showModal={openModal}
+        usedColors={usedColors}
         onClose={() => setOpenModal(false)}
       />
       <BudgetContainer>
