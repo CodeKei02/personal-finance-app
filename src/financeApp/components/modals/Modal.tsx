@@ -3,6 +3,7 @@ import { breakpoints, colors } from "../../../styles/theme";
 import iconClose from "../../../../public/images/icon-close-modal.svg";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 interface ModalProps {
   showModal: boolean;
@@ -41,7 +42,7 @@ const ModalContainer = styled.div`
   }
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled(motion.button)`
   position: absolute;
   top: 25px;
   right: 20px;
@@ -62,6 +63,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+
   const handleClickOutside = () => {
     if (onClose) {
       onClose();
@@ -69,13 +71,24 @@ export const Modal: React.FC<ModalProps> = ({
   };
   useClickOutside(modalRef, handleClickOutside);
   return (
-    <Overlay show={showModal}>
-      <ModalContainer ref={modalRef}>
-        <CloseButton onClick={onClose}>
-          <img src={iconClose} alt="close" />
-        </CloseButton>
-        {children}
-      </ModalContainer>
-    </Overlay>
+    <AnimatePresence>
+      {showModal && (
+        <Overlay show={showModal}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ModalContainer ref={modalRef}>
+              <CloseButton onClick={onClose} whileTap={{ y: 1 }}>
+                <img src={iconClose} alt="close" />
+              </CloseButton>
+              {children}
+            </ModalContainer>
+          </motion.div>
+        </Overlay>
+      )}
+    </AnimatePresence>
   );
 };
