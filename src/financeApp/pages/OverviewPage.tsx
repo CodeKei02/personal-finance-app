@@ -272,6 +272,7 @@ export const OverviewPage = () => {
             </div>
           }
           background={colors.greyDark}
+          backgroundhover={colors.greyMedium}
           color={colors.white}
           weight="700"
           border="transparent"

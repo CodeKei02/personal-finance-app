@@ -236,7 +236,7 @@ export const PlanModal = <T extends { id: string }>({
               <Button
                 type="submit"
                 background={colors.greyDark}
-                backgroundhover={colors.beigeLight}
+                backgroundhover={colors.greyMedium}
                 color={colors.white}
                 border="transparent"
                 weight="700"

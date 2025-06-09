@@ -235,6 +235,7 @@ export const TransactionsPage = () => {
           <Button
             children="+ Add New Transaction"
             background={colors.greyDark}
+            backgroundhover={colors.greyMedium}
             color={colors.white}
             weight={typography.textPreset4Bold.fontWeight}
             border="transparent"
@@ -245,6 +246,7 @@ export const TransactionsPage = () => {
           <Button
             children="+Connect my Google Sheets template"
             background={colors.greyDark}
+            backgroundhover={colors.greyMedium}
             color={colors.white}
             border="transparent"
             size={typography.textPreset4.size}

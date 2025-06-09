@@ -178,7 +178,7 @@ export const PotActionModal: React.FC<PotActionModalProps> = ({
                 <Button
                   type="submit"
                   background={colors.greyDark}
-                  backgroundhover={colors.beigeLight}
+                  backgroundhover={colors.greyMedium}
                   color={colors.white}
                   border="transparent"
                   weight="700"

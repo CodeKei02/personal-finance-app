@@ -101,6 +101,7 @@ export const BudgetsPage = () => {
         <Button
           children="+Add New Budget"
           background={colors.greyDark}
+          backgroundhover={colors.greyMedium}
           color={colors.white}
           weight={typography.textPreset4Bold.fontWeight}
           border="transparent"
