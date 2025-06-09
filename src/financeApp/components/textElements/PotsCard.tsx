@@ -3,12 +3,11 @@ import { CardHeader, ProgressBar } from "./index";
 import { Button } from "../../../components";
 import { breakpoints, colors } from "../../../styles/theme";
 import styled from "styled-components";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { PotActionModal } from "../modals/index";
 import { RootState } from "../../../store/store";
 import { DropdownEditDelete } from "../dropdown";
 import { updatePotItem, deletePotItem } from "../../../store/slices/potsSlice";
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { Motion } from "./Motion";
 
 const PotsCardContainer = styled.div`
@@ -77,7 +76,6 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
   );
   const [action, setAction] = useState<"add" | "withdraw" | null>(null);
   const [isOpenDropdown, setIsOpenDropdown] = useState(null);
-  const ref = useRef<HTMLDivElement>(null);
 
   const handleDropdownToggle = (id: any) => {
     setIsOpenDropdown((prevId) => (prevId === id ? null : id));
@@ -88,8 +86,6 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
     setIsOpenActionModal(id);
   };
 
-  useClickOutside(ref, () => setIsOpenDropdown(null));
-
   return (
     <>
       {items.length > 0 ? (
@@ -97,15 +93,13 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
           {items.map((item: any) => (
             <Motion key={item.id} card={item} index={item.id}>
               <Card key={item.id}>
-                <div ref={ref}>
-                  <CardHeader
-                    type={item}
-                    name={item.potName}
-                    handleDropdownToggle={() => {
-                      handleDropdownToggle(item.id);
-                    }}
-                  />
-                </div>
+                <CardHeader
+                  type={item}
+                  name={item.potName}
+                  handleDropdownToggle={() => {
+                    handleDropdownToggle(item.id);
+                  }}
+                />
 
                 <Flex>
                   <Paragraph>Total saved</Paragraph>
