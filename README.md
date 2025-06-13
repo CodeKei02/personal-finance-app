@@ -48,3 +48,25 @@ export default tseslint.config({
   },
 })
 ```
+
+## Disabled Auth Component
+
+**Note:** The authentication (Auth) component is currently disabled in this project. This means that user registration, login, and authentication-related features are not active or accessible in the current version of the application.
+
+### Why is Auth Disabled?
+- The Auth component was disabled for development, testing, or demonstration purposes.
+- No user credentials are required to access the app's main features.
+- All finance management features (transactions, budgets, pots, recurring bills, etc.) are available without authentication.
+
+### How Was Auth Disabled?
+- The authentication routes and logic are present in the codebase (see `src/auth/`), but are not active in the main app flow.
+- Any navigation or UI elements related to login/register are hidden or bypassed.
+- If you wish to enable authentication, review the `src/auth/` folder and related routing logic in `src/router/AppRouter.tsx`.
+
+### Security Notice
+- Since authentication is disabled, all data is accessible to anyone who can run the app.
+- Do not use this version in production or with sensitive/personal data.
+
+---
+
+For more information or to enable authentication, please refer to the code comments in the `src/auth/` folder and the main router configuration.
