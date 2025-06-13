@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import logoSmall from "../../../../public/images/logo-small.svg";
 import logoLarge from "../../../../public/images/logo-large.svg";
 import iconArrow from "../../../../public/images/icon-minimize-menu.svg";
@@ -231,6 +231,7 @@ const Button = styled.button<SidebarProps>`
 export const Dashboard = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.ui.isOpen);
+  const location = useLocation();
   const dashboardInfo = [
     {
       id: "1",
