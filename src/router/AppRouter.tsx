@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 // import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { FinanceMainApp } from "../financeApp/routes/FinanceMainApp";
 // import { useDispatch, useSelector } from "react-redux";
@@ -40,10 +40,10 @@ export const AppRouter = () => {
       ) : (
         <Route path="/auth/*" element={<AuthRoutes />} />
       )} */}
+      {/* <Route path="/*" element={<Navigate to="/auth/login" />} /> */}
 
       <Route path="/finance/*" element={<FinanceMainApp />} />
-
-      {/* <Route path="/*" element={<Navigate to="/auth/login" />} /> */}
+      <Route path="*" element={<Navigate to="/finance" replace />} />
     </Routes>
   );
 };
