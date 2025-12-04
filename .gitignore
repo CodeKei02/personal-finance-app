@@ -25,4 +25,4 @@ src/financeApp/backend/credentials.json
 *.sw?
 .qodo
 
-src/firebase/config.ts
+src/firebase
