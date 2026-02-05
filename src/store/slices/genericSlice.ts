@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import type { Draft } from 'immer';
 
-
-export interface GenericState<T> {
-    items: T[] | any;
-    selectedItem: T | null | any;
+export interface GenericState<T extends { id: string }> {
+    items: T[];
+    selectedItem: T | null;
     isEditModalOpen: boolean;
     isCreateModalOpen: boolean;
     loading: boolean;
@@ -12,7 +12,7 @@ export interface GenericState<T> {
 
 export function createGenericSlice<T extends { id: string }>(entityName: string) {
     const fetchItems = createAsyncThunk(`${entityName}/fetchItems`, async (): Promise<T[]> => {
-        return []; 
+        return [];
     });
 
     const addItem = createAsyncThunk(`${entityName}/addItem`, async (item: T): Promise<T> => {
@@ -41,7 +41,7 @@ export function createGenericSlice<T extends { id: string }>(entityName: string)
         initialState,
         reducers: {
             openEditModal(state, action: PayloadAction<T>) {
-                state.selectedItem = action.payload;
+                state.selectedItem = action.payload as Draft<T> | null;
                 state.isEditModalOpen = true;
             },
             closeEditModal(state) {
@@ -54,35 +54,6 @@ export function createGenericSlice<T extends { id: string }>(entityName: string)
             closeCreateModal(state) {
                 state.isCreateModalOpen = false;
             },
-        },
-        extraReducers: (builder) => {
-            builder
-                .addCase(fetchItems.pending, (state) => {
-                    state.loading = true;
-                    state.error = null;
-                })
-                .addCase(fetchItems.fulfilled, (state, action) => {
-                    state.items = action.payload;
-                    state.loading = false;
-                })
-                .addCase(fetchItems.rejected, (state, action) => {
-                    state.loading = false;
-                    state.error = action.error.message || 'Error';
-                })
-                .addCase(addItem.fulfilled, (state, action) => {
-                    state.items.push(action.payload);
-                })
-                .addCase(updateItem.fulfilled, (state, action) => {
-                    const index = state.items.findIndex((index: any) => index.id === action.payload.id);
-                    console.log("index", index);
-                    console.log("action.payload", action.payload.id);
-                    if (index !== -1) {
-                        state.items[index] = action.payload;
-                    }
-                })
-                .addCase(deleteItem.fulfilled, (state, action) => {
-                    state.items = state.items.filter((index: any) => index.id !== action.payload);
-                });
         },
     });
 

@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./store/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
 import { FinanceApp } from "./FinanceApp.tsx";
+import "@/styles/global.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

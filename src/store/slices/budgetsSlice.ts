@@ -1,11 +1,5 @@
 import { createGenericSlice } from "./genericSlice";
-
-export interface Budget {
-    id: string;
-    category: string;
-    maximum: number;
-    theme: string;
-}
+import { Budget } from "@/features/budgets/types";
 
 export const {
     reducer: budgetsReducer,

@@ -1,21 +1,8 @@
-import styled from "styled-components";
-import { colors } from "../styles/theme";
-
-const CheckingStyle = styled.div`
-  height: 100vh;
-  background-color: ${colors.greyDark};
-  display: grid;
-  place-items: center;
-
-  svg {
-    width: 80px;
-  }
-`;
-
 export const CheckingAuth = () => {
   return (
-    <CheckingStyle>
+    <div className="h-screen bg-greyDark grid place-items-center">
       <svg
+        className="w-20"
         fill="#277C78FF"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
@@ -34,6 +21,6 @@ export const CheckingAuth = () => {
           />
         </path>
       </svg>
-    </CheckingStyle>
+    </div>
   );
 };

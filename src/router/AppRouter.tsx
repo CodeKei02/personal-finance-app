@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-// import { AuthRoutes } from "../auth/routes/AuthRoutes";
-import { FinanceMainApp } from "../financeApp/routes/FinanceMainApp";
+// import { AuthRoutes } from "@/auth/routes/AuthRoutes";
+import { FinanceMainApp } from "@/features/shared/routes/FinanceMainApp";
 // import { useDispatch, useSelector } from "react-redux";
 // import { RootState } from "../store/store";
 // import { Navigate } from "react-router-dom";

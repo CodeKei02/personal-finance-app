@@ -1,0 +1,107 @@
+/* Tailwind CSS v4 - use @import instead of @tailwind directives */
+@import "tailwindcss";
+
+
+@theme {
+  /* Colors */
+  --color-beigeNormal: #98908b;
+  --color-beigeLight: #f8f4f0;
+  --color-greyDark: #201f24;
+  --color-greyNormal: #696868;
+  --color-greyMedium: #b3b3b3;
+  --color-greyLight: #f2f2f2;
+  --color-green: #277c78;
+  --color-yellow: #f2cdac;
+  --color-cyan: #82c9d7;
+  --color-navy: #626070;
+  --color-red: #c94736;
+  --color-violet: #826cb0;
+  --color-purple: #af81ba;
+  --color-turquoise: #597c7c;
+  --color-brown: #93674f;
+  --color-magenta: #934f6f;
+  --color-blue: #3f82b2;
+  --color-navyGrey: #97a0ac;
+  --color-armyGreen: #7f9161;
+  --color-gold: #cab361;
+  --color-orange: #be6c49;
+
+  /* Font family */
+  --font-sans: Manrope, serif;
+
+  /* Breakpoints (md: 768px default, lg: 1024px default) */
+  --breakpoint-md: 48.875rem;  /* 786px - was tablet */
+  --breakpoint-lg: 64rem;      /* 1024px - was desktop */
+
+  /* Typography presets */
+  --text-preset1: 32px;
+  --text-preset1--line-height: 1.2;
+  --text-preset2: 20px;
+  --text-preset2--line-height: 1.2;
+  --text-preset3: 16px;
+  --text-preset3--line-height: 1.5;
+  --text-preset4: 14px;
+  --text-preset4--line-height: 1.5;
+  --text-preset4Bold: 14px;
+  --text-preset4Bold--line-height: 1.5;
+  --font-weight-preset4Bold: 800;
+  --text-preset5: 12px;
+  --text-preset5--line-height: 1.5;
+  --text-preset5Bold: 12px;
+  --text-preset5Bold--line-height: 1.5;
+  --font-weight-preset5Bold: 800;
+}
+
+/*
+  GLOBAL STYLES - Personal Finance App
+  Colors, typography, breakpoints: use classes like text-greyDark, bg-green,
+  md:flex, lg:grid, text-preset1, etc.
+  TypeScript: import { colors, typography, breakpoints } from '@/styles/...'
+*/
+
+/* Dashboard logo – ensure spacing applies (avoids reset/selector override) */
+.logo {
+  cursor: pointer;
+  text-decoration: none;
+}
+@media (min-width: 64rem) {
+  .logo {
+    display: block;
+    padding-left: 1rem;
+    margin: 2rem 0;
+  }
+}
+
+/* Dashboard nav link – active state (avoids Tailwind purging conditional classes) */
+.dashboard-nav-link--active {
+  background-color: #fff;
+  border-bottom: 5px solid var(--color-green);
+  border-radius: 10px 10px 0 0;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+@media (min-width: 48.875rem) {
+  .dashboard-nav-link--active {
+    border-bottom: 5px solid var(--color-green);
+  }
+}
+@media (min-width: 64rem) {
+  .dashboard-nav-link--active {
+    border-bottom: 0;
+    background-color: #fff;
+    border-radius: 0;
+    width: 95%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: var(--color-greyDark);
+  }
+  .dashboard-nav-link--active path {
+    fill: var(--color-greyDark);
+  }
+}
+
+/* Oculta el botón X (clear) de los inputs type="search" */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}

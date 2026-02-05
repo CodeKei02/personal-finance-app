@@ -1,9 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { uiSlice } from "./slices/uiSlice";
-import { budgetsReducer  } from "./slices/budgetsSlice";
+import { budgetsReducer } from "./slices/budgetsSlice";
 import { potsReducer } from "./slices/potsSlice";
 import { transactionsSlice } from "./slices/transactionsSlice";
-import { authSlice } from "./auth/authSlice";
+import { authSlice } from "@/auth/authSlice";
 
 const transactions = transactionsSlice("transactions");
 
