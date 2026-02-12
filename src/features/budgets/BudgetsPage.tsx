@@ -53,6 +53,7 @@ export const BudgetsPage = () => {
   const { items } = useSelector((state: RootState) => state.budget);
   const { transactions } = useSelector((state: RootState) => state.transaction);
   const usedColors = items.map((item) => item.theme);
+
   return (
     <Container>
       <Header>

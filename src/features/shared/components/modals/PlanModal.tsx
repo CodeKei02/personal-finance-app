@@ -10,7 +10,7 @@ import { ThemeOption, PlanModalProps } from "./type";
 
 export const PlanModal = <
   T extends Record<string, unknown> = Record<string, unknown>,
-  P = T
+  P = T,
 >({
   type,
   title,
@@ -63,17 +63,12 @@ export const PlanModal = <
       } as unknown as P;
     }
 
-    // Cast needed: AsyncThunk's generic arg type is strict with generic P
-    const thunkResult = dispatch(dispatchAction(payload as never)) as {
-      unwrap: () => Promise<void>;
-    };
-    thunkResult.unwrap().then(() => {
-      setTimeout(() => {
-        resetForm();
-        setSubmitting(false);
-        onClose();
-      }, 1000);
-    });
+    setTimeout(() => {
+      dispatch(dispatchAction(payload as never));
+      resetForm();
+      setSubmitting(false);
+      onClose();
+    }, 1000);
   };
 
   const handleThemeSelect = (theme: ThemeOption) => {
@@ -85,8 +80,8 @@ export const PlanModal = <
   return (
     <Modal showModal={showModal} onClose={onClose}>
       <div className="modal-content">
-        <h2>{title}</h2>
-        <p>{paragraph}</p>
+        <h2 className="text-2xl mb-2 uppercase">{title}</h2>
+        <p className="text-[.9rem] ">{paragraph}</p>
 
         <Formik
           initialValues={initialValues}
