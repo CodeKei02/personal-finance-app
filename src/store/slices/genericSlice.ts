@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import type { Draft } from 'immer';
 
-
-export interface GenericState<T> {
-    items: T[] | any;
-    selectedItem: T | null | any;
+export interface GenericState<T extends { id: string }> {
+    items: T[];
+    selectedItem: T | null;
     isEditModalOpen: boolean;
     isCreateModalOpen: boolean;
     loading: boolean;
@@ -12,7 +12,7 @@ export interface GenericState<T> {
 
 export function createGenericSlice<T extends { id: string }>(entityName: string) {
     const fetchItems = createAsyncThunk(`${entityName}/fetchItems`, async (): Promise<T[]> => {
-        return []; 
+        return [];
     });
 
     const addItem = createAsyncThunk(`${entityName}/addItem`, async (item: T): Promise<T> => {
@@ -41,7 +41,7 @@ export function createGenericSlice<T extends { id: string }>(entityName: string)
         initialState,
         reducers: {
             openEditModal(state, action: PayloadAction<T>) {
-                state.selectedItem = action.payload;
+                state.selectedItem = action.payload as Draft<T> | null;
                 state.isEditModalOpen = true;
             },
             closeEditModal(state) {
@@ -62,26 +62,51 @@ export function createGenericSlice<T extends { id: string }>(entityName: string)
                     state.error = null;
                 })
                 .addCase(fetchItems.fulfilled, (state, action) => {
-                    state.items = action.payload;
                     state.loading = false;
+                    state.items = action.payload as Draft<T[]>;
                 })
                 .addCase(fetchItems.rejected, (state, action) => {
                     state.loading = false;
-                    state.error = action.error.message || 'Error';
+                    state.error = action.error.message ?? `Failed to fetch ${entityName}`;
+                })
+                .addCase(addItem.pending, (state) => {
+                    state.loading = true;
+                    state.error = null;
                 })
                 .addCase(addItem.fulfilled, (state, action) => {
-                    state.items.push(action.payload);
+                    state.loading = false;
+                    state.items.push(action.payload as Draft<T>);
+                })
+                .addCase(addItem.rejected, (state, action) => {
+                    state.loading = false;
+                    state.error = action.error.message ?? `Failed to add ${entityName}`;
+                })
+                .addCase(updateItem.pending, (state) => {
+                    state.loading = true;
+                    state.error = null;
                 })
                 .addCase(updateItem.fulfilled, (state, action) => {
-                    const index = state.items.findIndex((index: any) => index.id === action.payload.id);
-                    console.log("index", index);
-                    console.log("action.payload", action.payload.id);
+                    state.loading = false;
+                    const index = state.items.findIndex((item) => item.id === action.payload.id);
                     if (index !== -1) {
-                        state.items[index] = action.payload;
+                        state.items[index] = action.payload as Draft<T>;
                     }
                 })
+                .addCase(updateItem.rejected, (state, action) => {
+                    state.loading = false;
+                    state.error = action.error.message ?? `Failed to update ${entityName}`;
+                })
+                .addCase(deleteItem.pending, (state) => {
+                    state.loading = true;
+                    state.error = null;
+                })
                 .addCase(deleteItem.fulfilled, (state, action) => {
-                    state.items = state.items.filter((index: any) => index.id !== action.payload);
+                    state.loading = false;
+                    state.items = state.items.filter((item) => item.id !== action.payload) as Draft<T[]>;
+                })
+                .addCase(deleteItem.rejected, (state, action) => {
+                    state.loading = false;
+                    state.error = action.error.message ?? `Failed to delete ${entityName}`;
                 });
         },
     });

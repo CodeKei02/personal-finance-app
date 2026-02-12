@@ -1,20 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { Transaction } from "@/features/transactions/types";
 
-interface Transaction {
-  id: string;
-  name: string;
-  category: string;
-  amount: number | any;
-  date: string;
-  recurring: boolean;
-  transactiontype: string;
-}
 
 interface TransactionsState {
   transactions: Transaction[];
   selectedCategory: string;
   selectedSearch: string;
-  sortBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
+  // sortBy: 'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest';
+  sortBy: string;
   loading: boolean;
 }
 
@@ -28,44 +21,44 @@ const initialState: TransactionsState = {
 
 export const transactionsSlice = (sliceName: string) => {
   const fetchTransactions = createAsyncThunk(
-    `${sliceName}/fetchTransactions`, 
+    `${sliceName}/fetchTransactions`,
     async (): Promise<Transaction[]> => {
       return [];
     })
 
-    const slice = createSlice({
-      name: sliceName,
-      initialState,
-      reducers: {
-        addTransactions: (state, action: PayloadAction<Transaction>) => {
-          state.transactions.push(action.payload);
-        },
-        searchTransaction: (state, action: PayloadAction<string>) => {
-          state.selectedSearch = action.payload;
-        },
-        filterByCategory: (state, action: PayloadAction<string>) => {
-          state.selectedCategory = action.payload;
-        },
-        filterBy: (state, action: PayloadAction<'Latest' | 'Oldest' | 'A to Z' | 'Z to A' | 'Highest' | 'Lowest'>) => {
-          state.sortBy = action.payload;
-        },
+  const slice = createSlice({
+    name: sliceName,
+    initialState,
+    reducers: {
+      addTransactions: (state, action: PayloadAction<Transaction>) => {
+        state.transactions.push(action.payload);
       },
-      extraReducers: (builder) => {
-        builder
-          .addCase(fetchTransactions.pending, (state) => {
-            state.loading = true;
-          })
-          .addCase(fetchTransactions.fulfilled, (state, action) => {
-            state.loading = false;
-            state.transactions = action.payload;
-          })
-      }
-    })
+      searchTransaction: (state, action: PayloadAction<string>) => {
+        state.selectedSearch = action.payload;
+      },
+      filterByCategory: (state, action: PayloadAction<string>) => {
+        state.selectedCategory = action.payload;
+      },
+      filterBy: (state, action: PayloadAction<string>) => {
+        state.sortBy = action.payload;
+      },
+    },
+    extraReducers: (builder) => {
+      builder
+        .addCase(fetchTransactions.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchTransactions.fulfilled, (state, action) => {
+          state.loading = false;
+          state.transactions = action.payload;
+        })
+    }
+  })
 
-    return {
-      ...slice,
-      fetchTransactions,
-    };
+  return {
+    ...slice,
+    fetchTransactions,
+  };
 }
 
 export const { addTransactions, filterByCategory, filterBy, searchTransaction } = transactionsSlice('transactions').actions;

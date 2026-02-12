@@ -1,11 +1,13 @@
 import { Field, useFormikContext } from "formik";
-import styled from "styled-components";
-import { colors } from "../styles/theme";
-import { Label, Error } from "./index";
+import { Label } from "./Label";
+import { Error } from "./Error";
 import { useDispatch } from "react-redux";
+import { colors } from "@/styles/colors";
+
+type InputChangeValue = string | number | boolean;
 
 interface CustomInputProps {
-  id: string | any;
+  id: string;
   type:
     | "text"
     | "number"
@@ -13,68 +15,36 @@ interface CustomInputProps {
     | "checkbox"
     | "select"
     | "submit"
-    | "radio"
-    | any;
-  name: string | any;
-  label?: string | any;
+    | "radio";
+  name: string;
+  label?: string;
   values?: string[];
   value?: string;
   placeholder?: string;
   options?: string[];
-  onChange?: (value: any) => void;
+  onChange?: (value: InputChangeValue) => void;
   dispatchAction?: (value: any) => any;
   width?: string;
   border?: string;
-  direction?: string;
+  direction?: "row" | "column";
   marginleft?: string;
   count?: number;
   maxLength?: number;
-  setLength?: any;
-  children?: any;
+  setLength?: (length: number) => void;
+  children?: React.ReactNode;
+  className?: string;
 }
 
-interface Container {
-  direction?: string;
-  marginleft?: string;
-  background?: string;
+interface FormikFieldProps {
+  field: {
+    value: string | number | boolean;
+    name: string;
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    ) => void;
+    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  };
 }
-
-const Container = styled.div<Container>`
-  display: flex;
-  flex-direction: ${({ direction = "column" }) => direction};
-  margin: 1rem 0;
-
-  .message-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-  }
-
-  .radio-container {
-    width: 120px;
-    border: 1px solid ${colors.beigeNormal};
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: row-reverse;
-  }
-`;
-
-const InputStyled = styled(Field)`
-  width: ${({ width = "auto" }) => width};
-  padding: 12px 15px;
-  border-radius: 8px;
-  border: ${({ border = `1px solid ${colors.beigeNormal}` }) => border};
-  color: ${colors.greyDark};
-  margin-left: ${({ marginleft = "0rem" }) => marginleft};
-`;
-
-const SelectStyled = styled(Field)`
-  padding: 12px 20px;
-  border-radius: 8px;
-  border: ${({ border = `1px solid ${colors.beigeNormal}` }) => border};
-  color: ${colors.greyDark};
-`;
 
 export const Input: React.FC<CustomInputProps> = ({
   id,
@@ -91,26 +61,22 @@ export const Input: React.FC<CustomInputProps> = ({
   maxLength,
   onChange,
   dispatchAction,
-  count,
   setLength,
   children,
+  className: inputClassName,
 }) => {
   const { setFieldValue } = useFormikContext();
   const dispatch = useDispatch();
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     let value: string | number = event.target.value;
     if (type === "number" && value !== "") value = Number(value);
 
-    if (type === "text" && maxLength) {
-      count = event.target.value.length;
-      setLength(count++);
-
-      if (event.target.value.length === 0) {
-        setLength(0);
-      }
+    if (type === "text" && maxLength && setLength) {
+      const length = event.target.value.length;
+      setLength(length);
     }
 
     setFieldValue(name, value);
@@ -119,21 +85,36 @@ export const Input: React.FC<CustomInputProps> = ({
     if (dispatchAction) dispatch(dispatchAction(value));
   };
 
+  const getDirectionClass = () => {
+    return direction === "row"
+      ? "flex-row"
+      : direction === "column"
+        ? "flex-col"
+        : "flex-col";
+  };
+
+  const inputBaseClasses = "rounded-lg text-greyDark";
+  const inputBorder = border || `1px solid ${colors.beigeNormal}`;
+
   return (
-    <Container direction={direction}>
+    <div className={`flex ${getDirectionClass()} my-4`}>
       {type === "checkbox" ? (
         <>
-          <Label text={label} htmlFor={label} />
+          {label && <Label text={label} htmlFor={id} />}
           <Field name={name} className="checkbox">
-            {({ field }: any) => (
-              <InputStyled
+            {({ field }: FormikFieldProps) => (
+              <Field
                 {...field}
                 type="checkbox"
                 id={id}
                 placeholder={placeholder}
-                marginleft={marginleft}
-                width={width}
-                onChange={(event: any) => {
+                className={`${inputBaseClasses} py-3 px-4`}
+                style={{
+                  width: width || "auto",
+                  marginLeft: marginleft || "0rem",
+                  border: inputBorder,
+                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   field.onChange(event);
                   if (onChange) onChange(event.target.checked);
                 }}
@@ -144,18 +125,21 @@ export const Input: React.FC<CustomInputProps> = ({
         </>
       ) : type === "select" ? (
         <>
-          <Label text={label} htmlFor={name} />
+          {label != null && <Label text={label} htmlFor={name} />}
           <Field name={name}>
-            {({ field }: any) => (
-              <SelectStyled
+            {({ field }: FormikFieldProps) => (
+              <Field
                 {...field}
                 as="select"
                 id={id}
                 placeholder={placeholder}
                 onChange={handleChange}
-                marginleft={marginleft}
-                width={width}
-                border={border}
+                className={`${inputBaseClasses} py-3 px-5`}
+                style={{
+                  width: width || "auto",
+                  marginLeft: marginleft || "0rem",
+                  border: border || inputBorder,
+                }}
               >
                 <option value="" disabled>
                   {placeholder || "Select an option"}
@@ -165,24 +149,28 @@ export const Input: React.FC<CustomInputProps> = ({
                     {option}
                   </option>
                 ))}
-              </SelectStyled>
+              </Field>
             )}
           </Field>
         </>
       ) : type === "radio" ? (
-        <div className="radio-container">
-          <Label text={label} htmlFor={name} />
+        <div className="w-[120px] border border-beigeNormal rounded-lg p-4 flex flex-row-reverse">
+          {label != null && <Label text={label} htmlFor={name} />}
           <Field name={name}>
-            {({ field }: any) => (
-              <InputStyled
+            {({ field }: FormikFieldProps) => (
+              <Field
                 {...field}
                 type="radio"
                 id={id}
                 value={value}
                 placeholder={placeholder}
-                marginleft={marginleft}
-                width={width}
-                onChange={(event: any) => {
+                className={`${inputBaseClasses} py-3 px-4`}
+                style={{
+                  width: width || "auto",
+                  marginLeft: marginleft || "0rem",
+                  border: inputBorder,
+                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   field.onChange(event);
                   if (onChange) onChange(event.target.value);
                 }}
@@ -192,29 +180,33 @@ export const Input: React.FC<CustomInputProps> = ({
         </div>
       ) : (
         <>
-          <Label text={label} htmlFor={name} />
+          {label != null && <Label text={label} htmlFor={name} />}
           <Field name={name}>
-            {({ field }: any) => (
-              <InputStyled
+            {({ field }: FormikFieldProps) => (
+              <Field
                 {...field}
                 id={id}
                 type={type}
                 placeholder={placeholder}
-                marginleft={marginleft}
-                width={width}
-                direction={direction}
+                className={`${inputBaseClasses} py-3 px-4 ${
+                  inputClassName ?? ""
+                }`.trim()}
+                style={{
+                  width: width || "auto",
+                  marginLeft: marginleft || "0rem",
+                  border: border || inputBorder,
+                }}
                 onChange={handleChange}
-                border={border}
                 maxLength={maxLength}
               />
             )}
           </Field>
         </>
       )}
-      <div className="message-container">
+      <div className="flex justify-between mt-2">
         <Error name={name} />
         {children}
       </div>
-    </Container>
+    </div>
   );
 };

@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 src/financeApp/backend/credentials.json
+src/features/backend/credentials.json
 
 # Editor directories and files
 .vscode/*
@@ -25,4 +26,6 @@ src/financeApp/backend/credentials.json
 *.sw?
 .qodo
 
+src/firebase/
+tsconfig.tsbuildinfo
 src/firebase

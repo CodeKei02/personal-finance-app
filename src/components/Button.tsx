@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import { useState } from "react";
 
-interface ButtonProps {
-  children: any;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
   background?: string;
   backgroundhover?: string;
   color?: string;
@@ -10,70 +10,52 @@ interface ButtonProps {
   size?: string;
   width?: string;
   display?: string;
-  type?: string;
-  disabled?: boolean;
-  onClick?: () => void;
-  style?: React.CSSProperties;
 }
-
-const StyledButton = styled.button<ButtonProps>`
-  background: ${({ background = "transparent" }) => background};
-  color: ${({ color = "black" }) => color};
-  font-weight: ${({ weight = "800" }) => weight};
-  font-size: ${({ size = "1rem" }) => size};
-  border: 1px solid ${({ border = "black" }) => border};
-  width: ${({ width = "auto" }) => width};
-  height: max-content;
-  padding: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-
-  ${({ disabled }) =>
-    disabled &&
-    `
-    cursor: not-allowed;
-    opacity: 0.5;
-    pointer-events: none;
-    background-color: #f0f0f0;
-    `}
-
-  &:hover {
-    background-color: ${({ backgroundhover = "transparent" }) =>
-      backgroundhover};
-  }
-
-  @media (min-width: 786px) {
-    display: ${({ display = "block" }) => display};
-  }
-`;
 
 export const Button: React.FC<ButtonProps> = ({
   children,
-  background,
+  background = "transparent",
   backgroundhover,
-  color,
-  weight,
-  border,
-  size,
-  width,
-  display,
+  color = "black",
+  weight = "800",
+  border = "black",
+  size = "1rem",
+  width = "auto",
+  display = "block",
   disabled,
+  type = "button",
   ...rest
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const getDisplayClass = () => {
+    if (display === "none") return "hidden md:block";
+    return "block";
+  };
+
   return (
-    <StyledButton
-      background={background}
-      backgroundhover={backgroundhover}
-      color={color}
-      border={border}
-      weight={weight}
-      size={size}
-      width={width}
+    <button
+      type={type}
+      className={`
+        h-max px-4 py-4 rounded-lg cursor-pointer
+        ${getDisplayClass()}
+        ${disabled ? "cursor-not-allowed opacity-50 pointer-events-none bg-gray-200" : ""}
+        ${isHovered && backgroundhover ? "" : ""}
+      `}
+      style={{
+        background: isHovered && backgroundhover ? backgroundhover : background,
+        color: color,
+        fontWeight: weight,
+        fontSize: size,
+        border: `1px solid ${border}`,
+        width: width,
+      }}
       disabled={disabled}
-      display={display}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       {...rest}
     >
       {children}
-    </StyledButton>
+    </button>
   );
 };
