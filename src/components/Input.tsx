@@ -23,9 +23,7 @@ interface CustomInputProps {
   placeholder?: string;
   options?: string[];
   onChange?: (value: InputChangeValue) => void;
-  dispatchAction?: (
-    value: string | number
-  ) => import("@reduxjs/toolkit").UnknownAction;
+  dispatchAction?: (value: any) => any;
   width?: string;
   border?: string;
   direction?: "row" | "column";
@@ -42,7 +40,7 @@ interface FormikFieldProps {
     value: string | number | boolean;
     name: string;
     onChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => void;
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
   };
@@ -71,7 +69,7 @@ export const Input: React.FC<CustomInputProps> = ({
   const dispatch = useDispatch();
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     let value: string | number = event.target.value;
     if (type === "number" && value !== "") value = Number(value);
@@ -91,8 +89,8 @@ export const Input: React.FC<CustomInputProps> = ({
     return direction === "row"
       ? "flex-row"
       : direction === "column"
-      ? "flex-col"
-      : "flex-col";
+        ? "flex-col"
+        : "flex-col";
   };
 
   const inputBaseClasses = "rounded-lg text-greyDark";
