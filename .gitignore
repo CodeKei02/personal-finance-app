@@ -28,3 +28,4 @@ src/features/backend/credentials.json
 
 src/firebase/
 tsconfig.tsbuildinfo
+src/firebase
