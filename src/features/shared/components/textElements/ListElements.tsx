@@ -16,60 +16,54 @@ export const ListElements: React.FC<ListElementsProps> = ({
   };
   return (
     <>
-      <table className="w-full">
+      <div className={`w-full flex flex-col`}>
         {isTheader && (
-          <thead>
-            <tr
-              className="grid justify-between mt-6 mb-4 pb-4 border-b border-beigeLight text-preset5 text-beigeNormal"
-              style={{ gridTemplateColumns: `repeat(${repeat}, 1fr)` }}
-            >
-              {theader?.map((header, index) => (
-                <th key={index}>{header}</th>
-              ))}
-            </tr>
-          </thead>
+          <div
+            className="w-full grid justify-between place-items-center mt-6 mb-4 pb-4 border-b border-beigeLight text-preset5 text-beigeNormal"
+            style={{ gridTemplateColumns: `repeat(${repeat}, 1fr)` }}
+          >
+            {theader?.map((header, index) => (
+              <div key={index}>{header}</div>
+            ))}
+          </div>
         )}
 
-        <tbody>
-          {items.length > 0 &&
-            items.map((data: ListItem | RecurringBill, index: number) => (
-              <Motion
+        {items.length > 0 &&
+          items.map((data: ListItem | RecurringBill, index: number) => (
+            <Motion
+              key={index}
+              card={index}
+              index={index}
+              style={{ display: "block", width: "100%" }}
+            >
+              <div
                 key={index}
-                card={index}
-                index={index}
-                style={{ display: "block" }}
+                className=" grid justify-between border-b border-beigeLight last:border-b-0"
+                style={{ gridTemplateColumns: `repeat(${repeat}, 1fr)` }}
               >
-                <tr
-                  key={index}
-                  className="grid justify-between border-b border-beigeLight last:border-b-0"
-                  style={{ gridTemplateColumns: `repeat(${repeat}, 1fr)` }}
-                >
-                  <td className="flex items-center gap-4 my-4">
-                    <div>
-                      <strong>{data.name}</strong>
-                    </div>
-                  </td>
-                  {isCategory && (
-                    <td className="text-preset5 text-greyNormal self-center justify-self-center">
-                      {data.category}
-                    </td>
-                  )}
-                  <td className="text-preset5 text-greyNormal self-center justify-self-center">
-                    {data.date}
-                  </td>
+                <div className="flex gap-4 my-4">
+                  <strong>{data.name}</strong>
+                </div>
+                {isCategory && (
+                  <div className="text-preset5 text-greyNormal self-center justify-self-center">
+                    {data.category}
+                  </div>
+                )}
+                <div className="text-preset5 text-greyNormal self-center justify-self-center">
+                  {data.date}
+                </div>
 
-                  <td
-                    className="text-preset4Bold font-extrabold text-greyDark self-center justify-self-center"
-                    style={{ color: transactionType(data) }}
-                  >
-                    $ {data.transactiontype === "income" ? "+" : "-"}
-                    {Math.abs(data.amount).toFixed(2)}
-                  </td>
-                </tr>
-              </Motion>
-            ))}
-        </tbody>
-      </table>
+                <div
+                  className="text-preset4Bold font-extrabold text-greyDark self-center justify-self-center"
+                  style={{ color: transactionType(data) }}
+                >
+                  $ {data.transactiontype === "income" ? "+" : "-"}
+                  {Math.abs(data.amount).toFixed(2)}
+                </div>
+              </div>
+            </Motion>
+          ))}
+      </div>
       {items.length < 0 && <Paragraph align="center">No results</Paragraph>}
     </>
   );

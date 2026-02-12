@@ -133,7 +133,7 @@ export const TransactionModal = () => {
   useClickOutside(calendarRef, () => setShowCalendar(false));
   return (
     <Modal showModal={isOpenModal} onClose={() => dispatch(isCloseModal())}>
-      <h2>Add New Transaction</h2>
+      <h2 className="text-2xl mb-2 uppercase">Add New Transaction</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -202,7 +202,7 @@ export const TransactionModal = () => {
                     setSelectedDate(date);
                     setFieldValue(
                       "date",
-                      date?.toLocaleDateString().split("T")[0]
+                      date?.toLocaleDateString().split("T")[0],
                     );
                   }}
                 />
