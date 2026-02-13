@@ -5,14 +5,12 @@ import { ListElements } from "@/features/shared/components/textElements";
 import { Summary } from "@/features/shared/components/textElements/Summary";
 import { colors } from "@/styles/colors";
 import { typography } from "@/styles/typography";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Link } from "react-router-dom";
 import { Chart } from "@/features/shared/components/donut/Chart";
 import { LegendContent } from "@/features/shared/components/donut/LegendContent";
 import { Button } from "@/components/Button";
-import { onLogout } from "@/firebase/config";
-import { logout } from "@/auth/authSlice";
 import { motion } from "framer-motion";
 import { OverviewDetails } from "./types";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -52,12 +50,6 @@ export const OverviewPage = () => {
     },
   ];
 
-  const dispatch = useDispatch();
-  const handleLogout = async () => {
-    const result = await onLogout();
-    dispatch(logout(result));
-  };
-
   return (
     <Container>
       <Header className="text-2xl font-bold">
@@ -78,7 +70,6 @@ export const OverviewPage = () => {
           border="transparent"
           size={typography.textPreset4Bold.size}
           width="auto"
-          onClick={handleLogout}
         />
       </Header>
 
@@ -122,7 +113,7 @@ export const OverviewPage = () => {
                     <p className="text-[0.8rem] text-greyDark">Total Saved</p>
                     <h2 className="saved-amount md:text-3xl md:mt-2 lg:text-3xl lg:mt-2">{`$${pots.reduce(
                       (acc: number, item: any) => acc + item.amount,
-                      0
+                      0,
                     )}`}</h2>
                   </div>
                 </div>

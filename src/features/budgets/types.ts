@@ -1,3 +1,8 @@
+import type {
+  FormInput,
+  FormInputType,
+} from "@/features/shared/components/modals/type";
+
 export interface Budget {
   id: string;
   category: string;
@@ -7,7 +12,7 @@ export interface Budget {
 
 export interface ItemsInput {
   id: string;
-  type: string;
+  type: FormInputType;
   name: string;
   label: string;
   placeholder?: string;
@@ -15,6 +20,6 @@ export interface ItemsInput {
 }
 
 export interface FormBudgets {
-  budgets?: ItemsInput[];
+  budgets?: FormInput[];
   validationSchema: any;
 }
