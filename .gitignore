@@ -29,3 +29,9 @@ src/features/backend/credentials.json
 src/firebase/
 tsconfig.tsbuildinfo
 src/firebase
+
+# Monorepo (frontend) secrets
+frontend/src/firebase/
+frontend/src/features/backend/credentials.json
+# Generic safety: never commit secrets regardless of location
+credentials.json
