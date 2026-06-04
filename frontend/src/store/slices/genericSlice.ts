@@ -41,7 +41,7 @@ export function createGenericSlice<T extends { id: string }>(entityName: string)
         initialState,
         reducers: {
             openEditModal(state, action: PayloadAction<T>) {
-                state.selectedItem = action.payload as Draft<T> | null;
+                state.selectedItem = action.payload as typeof state.selectedItem;
                 state.isEditModalOpen = true;
             },
             closeEditModal(state) {
