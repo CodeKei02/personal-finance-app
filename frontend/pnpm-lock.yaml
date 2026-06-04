@@ -35,6 +35,12 @@ importers:
       formik:
         specifier: ^2.4.6
         version: 2.4.9(@types/react@18.3.30)(react@19.2.7)
+      framer-motion:
+        specifier: ^12.40.0
+        version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      immer:
+        specifier: ^11.1.8
+        version: 11.1.8
       motion:
         specifier: ^12.16.0
         version: 12.40.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -53,6 +59,9 @@ importers:
       react-redux:
         specifier: 9.2.0
         version: 9.2.0(@types/react@18.3.30)(react@19.2.7)(redux@5.0.1)
+      react-router:
+        specifier: ^7.1.5
+        version: 7.1.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-router-dom:
         specifier: 7.1.5
         version: 7.1.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
