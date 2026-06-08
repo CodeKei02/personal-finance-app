@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { useState } from "react";
 
 interface DropdownProps {
@@ -15,11 +14,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
   dispatchAction,
 }) => {
   const [selected, setSelected] = useState(text);
-  const dispatch = useDispatch();
 
   const handleSelect = (value: string) => {
     setSelected(value);
-    dispatch(dispatchAction(value));
+    dispatchAction(value);
   };
   return (
     <div

@@ -1,12 +1,8 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { DropdownEditDelete } from "@/features/shared/components/dropdown/DropdownEditDelete";
-import {
-  updateBudgetItem,
-  deleteBudgetItem,
-} from "@/store/slices/budgetsSlice";
+import { useBudgetStore } from "@/store/useBudgetStore";
+import { useTransactionStore } from "@/store/useTransactionStore";
 import { useState } from "react";
-import { RootState } from "@/store/store";
 import { CardHeader } from "@/features/shared/components/textElements/CardHeader";
 import { Motion } from "@/features/shared/components/textElements/Motion";
 import { FormBudgets } from "../types";
@@ -18,10 +14,11 @@ export const BudgetsCard: React.FC<FormBudgets> = ({
   budgets,
   validationSchema,
 }) => {
-  const { transactions } = useSelector((state: RootState) => state.transaction);
-  const { selectedItem, items } = useSelector(
-    (state: RootState) => state.budget
-  );
+  const transactions = useTransactionStore((state) => state.all);
+  const items = useBudgetStore((state) => state.items);
+  const selectedItem = useBudgetStore((state) => state.selectedItem);
+  const updateBudget = useBudgetStore((state) => state.updateBudget);
+  const deleteBudget = useBudgetStore((state) => state.deleteBudget);
   const [dropdownId, setDropdownId] = useState<string | null>(null);
 
   const handleDropdownToggle = (id: string) => {
@@ -132,8 +129,8 @@ export const BudgetsCard: React.FC<FormBudgets> = ({
                 paragraph="As your budgets changes, feel free to update your spending limits"
                 category={budget.category}
                 item={budget}
-                onEdit={updateBudgetItem}
-                onDelete={(item: Budget) => deleteBudgetItem(item.id)}
+                onEdit={updateBudget}
+                onDelete={(item: Budget) => deleteBudget(item.id)}
                 inputs={budgetInputs}
                 initialValues={{
                   id: budget.id,

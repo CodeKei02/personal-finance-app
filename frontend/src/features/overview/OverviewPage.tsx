@@ -5,20 +5,40 @@ import { ListElements } from "@/features/shared/components/textElements";
 import { Summary } from "@/features/shared/components/textElements/Summary";
 import { colors } from "@/styles/colors";
 import { typography } from "@/styles/typography";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { Link } from "react-router-dom";
 import { Chart } from "@/features/shared/components/donut/Chart";
 import { LegendContent } from "@/features/shared/components/donut/LegendContent";
 import { Button } from "@/components/Button";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { OverviewDetails } from "./types";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { usePotStore } from "@/store/usePotStore";
+import { useBudgetStore } from "@/store/useBudgetStore";
+import { useTransactionStore } from "@/store/useTransactionStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { CurrencySelector } from "@/features/shared/components/currency/CurrencySelector";
+import { api } from "@/lib/api";
 
 export const OverviewPage = () => {
-  const { items: pots } = useSelector((state: RootState) => state.pot);
-  const { items: budgets } = useSelector((state: RootState) => state.budget);
-  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const pots = usePotStore((state) => state.items);
+  const budgets = useBudgetStore((state) => state.items);
+  const transactions = useTransactionStore((state) => state.all);
+  const format = useCurrencyStore((state) => state.format);
+  const currency = useCurrencyStore((state) => state.currency);
+  const logout = useAuthStore((state) => state.logout);
+
+  const [monthlyExpenses, setMonthlyExpenses] = useState(0);
+
+  // Demonstrates the server-side aggregate endpoint (prisma aggregate _sum).
+  useEffect(() => {
+    api
+      .get<{ month: string; totalExpenses: number }>("/transactions/summary/monthly")
+      .then((res) => setMonthlyExpenses(res.totalExpenses))
+      .catch(() => setMonthlyExpenses(0));
+  }, [transactions.length]);
+
   const totalIncome = transactions
     .filter((transaction) => transaction.transactiontype === "income")
     .reduce((acc, transaction) => acc + Number(transaction.amount), 0);
@@ -28,23 +48,24 @@ export const OverviewPage = () => {
     .reduce((acc, transaction) => acc + Number(transaction.amount), 0);
 
   const currentBalance = totalIncome + totalExpenses;
+  const totalSaved = pots.reduce((acc: number, item: any) => acc + item.amount, 0);
 
   const details: OverviewDetails[] = [
     {
       title: "Current Balance",
-      amount: ` ${currentBalance.toFixed(2)}$`,
+      amount: format(currentBalance),
       background: colors.greyDark,
       color: colors.white,
     },
     {
       title: "Income",
-      amount: ` ${totalIncome.toFixed(2)}$`,
+      amount: format(totalIncome),
       background: colors.green,
       color: colors.white,
     },
     {
       title: "Expenses",
-      amount: ` ${totalExpenses.toFixed(2)}$`,
+      amount: format(Math.abs(totalExpenses)),
       background: colors.red,
       color: colors.white,
     },
@@ -54,23 +75,27 @@ export const OverviewPage = () => {
     <Container>
       <Header className="text-2xl font-bold">
         <Headline title="Overview" />
-        <Button
-          children={
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <img src="/images/logout.png" alt="Logout" />
-              Logout
-            </div>
-          }
-          background={colors.greyDark}
-          backgroundhover={colors.greyMedium}
-          color={colors.white}
-          weight="700"
-          border="transparent"
-          size={typography.textPreset4Bold.size}
-          width="auto"
-        />
+        <div className="flex items-center gap-4">
+          <CurrencySelector />
+          <Button
+            children={
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <img src="/images/logout.png" alt="Logout" />
+                Logout
+              </div>
+            }
+            background={colors.greyDark}
+            backgroundhover={colors.greyMedium}
+            color={colors.white}
+            weight="700"
+            border="transparent"
+            size={typography.textPreset4Bold.size}
+            width="auto"
+            onClick={() => logout()}
+          />
+        </div>
       </Header>
 
       <motion.div
@@ -93,6 +118,14 @@ export const OverviewPage = () => {
             </div>
           ))}
         </div>
+
+        <div className="mt-4 rounded-lg bg-white p-4 shadow-[0px_4px_20px_rgba(0,0,0,0.1)]">
+          <p className="text-[0.8rem] text-greyNormal">
+            Expenses this month ({currency})
+          </p>
+          <h2 className="font-bold text-greyDark">{format(monthlyExpenses)}</h2>
+        </div>
+
         <div className="lg:grid lg:grid-cols-2 lg:auto-rows-auto lg:gap-8">
           <section className="column-1">
             <div className="bg-white my-6 rounded-lg p-4 lg:pots lg:min-w-[500px] lg:h-[300px]">
@@ -111,10 +144,9 @@ export const OverviewPage = () => {
                   <img src="/images/icon-pot.svg" alt="Icon Pot Saved" />
                   <div>
                     <p className="text-[0.8rem] text-greyDark">Total Saved</p>
-                    <h2 className="saved-amount md:text-3xl md:mt-2 lg:text-3xl lg:mt-2">{`$${pots.reduce(
-                      (acc: number, item: any) => acc + item.amount,
-                      0,
-                    )}`}</h2>
+                    <h2 className="saved-amount md:text-3xl md:mt-2 lg:text-3xl lg:mt-2">
+                      {format(totalSaved)}
+                    </h2>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 grid-rows-2 md:grid-cols-[repeat(2,200px)] lg:grid-cols-2 lg:gap-4 potsLegend">
@@ -130,7 +162,7 @@ export const OverviewPage = () => {
                         <p className="text-[0.8rem] text-greyDark">
                           {item.potName}
                         </p>
-                        <strong>{`$${item.amount}`}</strong>
+                        <strong>{format(item.amount)}</strong>
                       </div>
                     </div>
                   ))}

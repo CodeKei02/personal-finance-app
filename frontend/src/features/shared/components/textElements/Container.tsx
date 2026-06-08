@@ -1,9 +1,8 @@
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useUiStore } from "@/store/useUiStore";
 import { ContainerProps } from "./types";
 
 export const Container: React.FC<ContainerProps> = ({ children }) => {
-  const isOpen = useSelector((state: RootState) => state.ui.isOpen);
+  const isOpen = useUiStore((state) => state.isOpen);
 
   return (
     <section

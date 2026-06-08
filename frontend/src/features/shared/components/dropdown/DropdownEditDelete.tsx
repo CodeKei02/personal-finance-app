@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { colors } from "@/styles/colors";
 import { Modal } from "../modals/Modal";
 import { PlanModal } from "../modals/PlanModal";
 import { Button } from "@/components/Button";
 import { DropdownEditDeleteProps } from "./types";
-import type { AppDispatch } from "@/store/store";
 
 export const DropdownEditDelete = <T extends { id: string }>({
   method,
@@ -21,12 +19,11 @@ export const DropdownEditDelete = <T extends { id: string }>({
   initialValues,
   validationSchema,
 }: DropdownEditDeleteProps<T>) => {
-  const dispatch = useDispatch<AppDispatch>();
   const [action, setAction] = useState<"edit" | "delete" | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
   const handleDelete = () => {
-    dispatch(onDelete(item));
+    void onDelete(item);
     setOpenModal(false);
   };
 

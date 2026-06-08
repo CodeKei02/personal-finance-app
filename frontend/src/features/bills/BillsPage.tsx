@@ -5,21 +5,20 @@ import { ListElementsHeader } from "@/features/shared/components/textElements/Li
 import { ListElements } from "@/features/shared/components/textElements/ListElements";
 import { Summary } from "@/features/shared/components/textElements/Summary";
 import { searchItems, sortItems } from "@/features/shared/utils";
-import { filterBy, searchTransaction } from "@/store/slices/transactionsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useTransactionStore } from "@/store/useTransactionStore";
 import { Formik } from "formik";
 import { useState } from "react";
 import { Button } from "@/components";
-import { RootState } from "@/store/store";
 import { getRecurringData, getTotalAmount } from "./utils/billsUtils";
 import { motion } from "motion/react";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 export const BillsPage = () => {
-  const dispatch = useDispatch();
-  const { transactions, selectedSearch, sortBy } = useSelector(
-    (state: RootState) => state.transaction
-  );
+  const transactions = useTransactionStore((state) => state.all);
+  const selectedSearch = useTransactionStore((state) => state.selectedSearch);
+  const sortBy = useTransactionStore((state) => state.sortBy);
+  const setSelectedSearch = useTransactionStore((state) => state.setSelectedSearch);
+  const setSortBy = useTransactionStore((state) => state.setSortBy);
   const [showSort, setShowSort] = useState(false);
   const handleDropdown = (
     show: boolean,
@@ -63,8 +62,8 @@ export const BillsPage = () => {
             >
               <ListElementsHeader
                 type="Bills"
-                dispatchSearch={(value) => dispatch(searchTransaction(value))}
-                dispatchFilter={(value) => dispatch(filterBy(value))}
+                dispatchSearch={(value) => setSelectedSearch(value)}
+                dispatchFilter={(value) => setSortBy(value)}
                 showSort={showSort}
                 setShowSort={setShowSort}
               />
