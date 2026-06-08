@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import type { AsyncThunk } from "@reduxjs/toolkit";
 
 export interface ThemeOption {
     name: string;
@@ -37,7 +36,7 @@ export interface PlanModalProps<T extends Record<string, unknown> = Record<strin
     validationSchema: Yup.ObjectSchema<Record<string, unknown>>;
     themeOptions?: ThemeOption[];
     showModal: boolean;
-    dispatchAction: AsyncThunk<any, P, object>;
+    dispatchAction: (payload: P) => void | Promise<void>;
     usedColors?: string[];
     onClose: () => void;
     onSubmitCallback?: (values: T) => P;
