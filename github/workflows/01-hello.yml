@@ -8,5 +8,5 @@ jobs:
     steps:
       - name: Saludar
         run: echo "Hola desde Github Actions"
-      - name: Ver archivos disponibles
+      - name: Ver archivos disponibles x2
         run: ls -la
