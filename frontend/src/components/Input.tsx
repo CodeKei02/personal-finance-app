@@ -1,7 +1,6 @@
 import { Field, useFormikContext } from "formik";
 import { Label } from "./Label";
 import { Error } from "./Error";
-import { useDispatch } from "react-redux";
 import { colors } from "@/styles/colors";
 
 type InputChangeValue = string | number | boolean;
@@ -66,7 +65,6 @@ export const Input: React.FC<CustomInputProps> = ({
   className: inputClassName,
 }) => {
   const { setFieldValue } = useFormikContext();
-  const dispatch = useDispatch();
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -82,7 +80,7 @@ export const Input: React.FC<CustomInputProps> = ({
     setFieldValue(name, value);
 
     if (onChange) onChange(value);
-    if (dispatchAction) dispatch(dispatchAction(value));
+    if (dispatchAction) dispatchAction(value);
   };
 
   const getDirectionClass = () => {
