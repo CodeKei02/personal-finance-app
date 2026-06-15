@@ -11,8 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-src/financeApp/backend/credentials.json
-src/features/backend/credentials.json
 
 # Editor directories and files
 .vscode/*
@@ -35,3 +33,9 @@ frontend/src/firebase/
 frontend/src/features/backend/credentials.json
 # Generic safety: never commit secrets regardless of location
 credentials.json
+
+frontend/.env
+backend/.env
+backend/node_modules/
+backend/dist/
+backend/*.log
