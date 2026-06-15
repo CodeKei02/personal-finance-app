@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Currency {
+  VES
+  USD
+  EUR
+}
+
+enum TransactionType {
+  income
+  expense
+}
+
+enum BillStatus {
+  PAID
+  PENDING
+  UPCOMING
+}
+
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  passwordHash      String?
+  displayName       String?
+  isGuest           Boolean         @default(false)
+  preferredCurrency Currency        @default(USD)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  transactions      Transaction[]
+  budgets           Budget[]
+  pots              Pot[]
+  recurringBills    RecurringBill[]
+}
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  category        String
+  amount          Decimal         @db.Decimal(14, 2)
+  date            DateTime
+  recurring       Boolean         @default(false)
+  transactionType TransactionType
+  createdAt       DateTime        @default(now())
+
+  @@index([userId, date])
+  @@index([userId, category])
+}
+
+model Budget {
+  id       String  @id @default(cuid())
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category String
+  maximum  Decimal @db.Decimal(14, 2)
+  theme    String
+
+  @@index([userId])
+}
+
+model Pot {
+  id      String  @id @default(cuid())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  potName String
+  amount  Decimal @db.Decimal(14, 2)
+  target  Decimal @db.Decimal(14, 2)
+  theme   String
+
+  @@index([userId])
+}
+
+model RecurringBill {
+  id                 String     @id @default(cuid())
+  userId             String
+  user               User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name               String
+  category           String
+  amount             Decimal    @db.Decimal(14, 2)
+  dueDay             Int
+  status             BillStatus @default(UPCOMING)
+  theme              String     @default("#277C78")
+  lastGeneratedMonth String?
+  createdAt          DateTime   @default(now())
+
+  @@index([userId])
+}
+
+model ExchangeRate {
+  id        String   @id @default(cuid())
+  base      String
+  currency  String
+  rate      Decimal  @db.Decimal(18, 8)
+  fetchedAt DateTime @default(now())
+
+  @@unique([base, currency])
+}
