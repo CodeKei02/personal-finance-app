@@ -1,0 +1,12 @@
+name: 03 - Schedule
+on:
+  schedule:
+    - cron: "0 9 * * *"
+jobs:
+  schedule:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Saludar
+        run: echo "Hola desde Github Actions"
