@@ -12,3 +12,12 @@ jobs:
         run: echo "Hola desde Github Actions"
       - name: Ver archivos disponibles x2
         run: ls -la
+
+  repo-files:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Descargar codigo del repo
+        uses: actions/checkout@v6
+
+      - name: Ver archivos disponibles
+        run: ls -la
