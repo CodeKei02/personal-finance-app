@@ -1,8 +1,6 @@
 import { Modal } from "./Modal";
 import { Button, Input, Label } from "@/components";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
 import { Formik, Form, FormikHelpers } from "formik";
 import { v4 as uuidv4 } from "uuid";
 import { colors } from "@/styles/colors";
@@ -45,7 +43,6 @@ export const PlanModal = <
     ...theme,
     used: usedColors.includes(theme.value),
   }));
-  const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<ThemeOption>(themes[0]);
 
@@ -64,10 +61,11 @@ export const PlanModal = <
     }
 
     setTimeout(() => {
-      dispatch(dispatchAction(payload as never));
-      resetForm();
-      setSubmitting(false);
-      onClose();
+      void Promise.resolve(dispatchAction(payload)).finally(() => {
+        resetForm();
+        setSubmitting(false);
+        onClose();
+      });
     }, 1000);
   };
 

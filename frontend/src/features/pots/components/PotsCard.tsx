@@ -1,13 +1,11 @@
-import { useSelector } from "react-redux";
 import { CardHeader } from "@/features/shared/components/textElements/CardHeader";
 import { ProgressBar } from "@/features/shared/components/textElements/ProgressBar";
 import { Button } from "@/components";
 import { colors } from "@/styles/colors";
 import React, { useState } from "react";
 import { PotActionModal } from "./PotActionModal";
-import { RootState } from "@/store/store";
+import { usePotStore } from "@/store/usePotStore";
 import { DropdownEditDelete } from "@/features/shared/components/dropdown/DropdownEditDelete";
-import { updatePotItem, deletePotItem } from "@/store/slices/potsSlice";
 import { Motion } from "@/features/shared/components/textElements/Motion";
 
 interface ItemsInput {
@@ -24,7 +22,10 @@ interface FormPot {
 }
 
 export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
-  const { items, selectedItem } = useSelector((state: RootState) => state.pot);
+  const items = usePotStore((state) => state.items);
+  const selectedItem = usePotStore((state) => state.selectedItem);
+  const updatePot = usePotStore((state) => state.updatePot);
+  const deletePot = usePotStore((state) => state.deletePot);
   const [isOpenActionModal, setIsOpenActionModal] = useState<string | null>(
     null
   );
@@ -134,9 +135,9 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
                     category={item.potName}
                     title="Edit Pot"
                     paragraph="If your savings targets change, feel free to update your pots."
-                    item={item.id}
-                    onEdit={updatePotItem}
-                    onDelete={() => deletePotItem(item.id)}
+                    item={item}
+                    onEdit={updatePot}
+                    onDelete={() => deletePot(item.id)}
                     inputs={pots}
                     initialValues={{
                       id: item.id,

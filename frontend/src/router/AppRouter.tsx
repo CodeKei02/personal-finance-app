@@ -1,47 +1,34 @@
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-// import { AuthRoutes } from "@/auth/routes/AuthRoutes";
+import { AuthRoutes } from "@/auth/routes/AuthRoutes";
 import { FinanceMainApp } from "@/features/shared/routes/FinanceMainApp";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "../store/store";
-// import { Navigate } from "react-router-dom";
-// import { useEffect } from "react";
-// import { CheckingAuth } from "../ui/CheckingAuth";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { auth } from "../firebase/config";
-// import { login, logout } from "../store/auth";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { CheckingAuth } from "@/ui/CheckingAuth";
 
 export const AppRouter = () => {
-  // const { status } = useSelector((state: RootState) => state.auth);
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const dispatch = useDispatch();
+  const status = useAuthStore((state) => state.status);
+  const loadSession = useAuthStore((state) => state.loadSession);
+  const fetchRates = useCurrencyStore((state) => state.fetchRates);
 
-  // useEffect(() => {
-  //   if (status === "authenticated" && location.pathname.startsWith("/auth")) {
-  //     navigate("/finance", { replace: true });
-  //   }
-  // }, [status, location, navigate]);
+  useEffect(() => {
+    void loadSession();
+    void fetchRates();
+  }, [loadSession, fetchRates]);
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, async (user) => {
-  //     if (!user) return dispatch(logout({ errorMessage: null }));
-  //     const { uid, email, displayName, photoURL } = user;
-  //     dispatch(login({ uid, email, displayName, photoURL }));
-  //   });
+  if (status === "checking") return <CheckingAuth />;
 
-  //   return () => {};
-  // }, []);
+  if (status !== "authenticated") {
+    return (
+      <Routes>
+        <Route path="/auth/*" element={<AuthRoutes />} />
+        <Route path="/*" element={<Navigate to="/auth/login" replace />} />
+      </Routes>
+    );
+  }
 
-  // if (status === "checking") return <CheckingAuth />;
   return (
     <Routes>
-      {/* {status === "authenticated" ? (
-        <Route path="/finance/*" element={<FinanceMainApp />} />
-      ) : (
-        <Route path="/auth/*" element={<AuthRoutes />} />
-      )} */}
-      {/* <Route path="/*" element={<Navigate to="/auth/login" />} /> */}
-
       <Route path="/finance/*" element={<FinanceMainApp />} />
       <Route path="*" element={<Navigate to="/finance" replace />} />
     </Routes>

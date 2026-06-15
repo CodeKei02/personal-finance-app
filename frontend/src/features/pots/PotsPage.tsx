@@ -8,14 +8,13 @@ import { colors } from "@/styles/colors";
 import { typography } from "@/styles/typography";
 import { PlanModal } from "@/features/shared/components/modals/PlanModal";
 import * as Yup from "yup";
-import { addPotItem } from "@/store/slices/potsSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { usePotStore } from "@/store/usePotStore";
 import type { FormInput } from "@/features/shared/components/modals/type";
 
 export const PotsPage = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { items } = useSelector((state: RootState) => state.pot);
+  const items = usePotStore((state) => state.items);
+  const addPot = usePotStore((state) => state.addPot);
   const usedColors = items.map((item: { theme: string }) => item.theme);
   const inputsPots: FormInput[] = [
     {
@@ -61,7 +60,7 @@ export const PotsPage = () => {
         title="Add New Pot"
         paragraph="lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id erat ut nisi efficitur facilisis. Donec ac ligula a nunc efficitur tincidunt."
         buttonText="Add Pot"
-        dispatchAction={addPotItem}
+        dispatchAction={addPot}
         inputs={inputsPots}
         initialValues={{ potName: "", target: 0, amount: 0 }}
         validationSchema={potValidationSchema}

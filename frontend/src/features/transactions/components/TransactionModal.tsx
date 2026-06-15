@@ -1,16 +1,13 @@
 import { Form, Formik } from "formik";
 import { Input, Button, Error } from "@/components";
 import { Calendar } from "@/features/shared/components/calendar/Calendar";
-import { useDispatch, useSelector } from "react-redux";
-import { addTransactions } from "@/store/slices/transactionsSlice";
 import { Modal } from "@/features/shared/components/modals/Modal";
 import { colors } from "@/styles/colors";
 import { useState, useRef } from "react";
-import { RootState } from "@/store/store";
 import { useClickOutside } from "@/features/shared/hooks/useClickOutside";
 import * as Yup from "yup";
-import { v4 as uuidv4 } from "uuid";
-import { isCloseModal } from "@/store/slices/uiSlice";
+import { useUiStore } from "@/store/useUiStore";
+import { useTransactionStore } from "@/store/useTransactionStore";
 
 interface MyFormValues {
   name: string;
@@ -107,15 +104,17 @@ export const TransactionModal = () => {
   const calendarRef = useRef<HTMLDivElement | null>(null);
   const [length, setLength] = useState(0);
 
-  const isOpenModal = useSelector((state: RootState) => state.ui.isModalOpen);
-
-  const dispatch = useDispatch();
+  const isOpenModal = useUiStore((state) => state.isModalOpen);
+  const closeModal = useUiStore((state) => state.closeModal);
+  const addTransaction = useTransactionStore((state) => state.addTransaction);
 
   const handleFormSubmit = (values: any, { resetForm, setSubmitting }: any) => {
+    const isExpense = values.transactiontype === "expense";
+    const normalizedAmount = Math.abs(Number(values.amount)) * (isExpense ? -1 : 1);
+
     const newTransaction = {
-      id: uuidv4(),
       name: values.name,
-      amount: Number(values.amount),
+      amount: normalizedAmount,
       category: values.category,
       transactiontype: values.transactiontype,
       recurring: values.recurring,
@@ -123,16 +122,17 @@ export const TransactionModal = () => {
     };
 
     setTimeout(() => {
-      dispatch(addTransactions(newTransaction));
-      resetForm();
-      setSubmitting(false);
-      dispatch(isCloseModal());
+      void addTransaction(newTransaction).finally(() => {
+        resetForm();
+        setSubmitting(false);
+        closeModal();
+      });
     }, 1000);
   };
 
   useClickOutside(calendarRef, () => setShowCalendar(false));
   return (
-    <Modal showModal={isOpenModal} onClose={() => dispatch(isCloseModal())}>
+    <Modal showModal={isOpenModal} onClose={() => closeModal()}>
       <h2 className="text-2xl mb-2 uppercase">Add New Transaction</h2>
       <Formik
         initialValues={initialValues}

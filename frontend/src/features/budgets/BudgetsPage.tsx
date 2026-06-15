@@ -10,9 +10,8 @@ import { Chart } from "@/features/shared/components/donut/Chart";
 import { useState } from "react";
 import { FormInput } from "@/features/shared/components/modals/type";
 import * as Yup from "yup";
-import { addBudgetItem } from "@/store/slices/budgetsSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useBudgetStore } from "@/store/useBudgetStore";
+import { useTransactionStore } from "@/store/useTransactionStore";
 import { LegendContent } from "@/features/shared/components/donut/LegendContent";
 import type { Budget } from "@/features/budgets/types";
 
@@ -50,8 +49,9 @@ export const BudgetsPage = () => {
   });
 
   const [openModal, setOpenModal] = useState(false);
-  const { items } = useSelector((state: RootState) => state.budget);
-  const { transactions } = useSelector((state: RootState) => state.transaction);
+  const items = useBudgetStore((state) => state.items);
+  const addBudget = useBudgetStore((state) => state.addBudget);
+  const transactions = useTransactionStore((state) => state.all);
   const usedColors = items.map((item) => item.theme);
 
   return (
@@ -74,7 +74,7 @@ export const BudgetsPage = () => {
         title="Add New Budget"
         paragraph="Choose a category to set a spending budget. These categories can help you monitor spending"
         buttonText="Add Budget"
-        dispatchAction={addBudgetItem}
+        dispatchAction={addBudget}
         inputs={budgetInputs}
         initialValues={{ category: "", maximum: 0 }}
         validationSchema={budgetValidationSchema}

@@ -1,21 +1,19 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useRef, useCallback } from "react";
 import { typography } from "@/styles/typography";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleMenu } from "@/store/slices/uiSlice";
-import { RootState } from "@/store/store";
+import { useUiStore } from "@/store/useUiStore";
 import { dashboardInfo } from "./constants/dashboardInfo";
 import { useClickOutside } from "@/features/shared/hooks/useClickOutside";
 
 export const Dashboard = () => {
-  const dispatch = useDispatch();
-  const isOpen = useSelector((state: RootState) => state.ui.isOpen);
+  const isOpen = useUiStore((state) => state.isOpen);
+  const toggleMenu = useUiStore((state) => state.toggleMenu);
   const location = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback(() => {
-    if (isOpen) dispatch(toggleMenu());
-  }, [isOpen, dispatch]);
+    if (isOpen) toggleMenu();
+  }, [isOpen, toggleMenu]);
 
   useClickOutside(sidebarRef, handleClickOutside);
 
@@ -84,7 +82,7 @@ export const Dashboard = () => {
       </ul>
 
       <button
-        onClick={() => dispatch(toggleMenu())}
+        onClick={() => toggleMenu()}
         className="hidden lg:flex lg:absolute lg:bottom-14 lg:gap-6  lg:items-center border-0 bg-transparent text-white cursor-pointer"
         style={{ marginLeft: "1rem" }}
       >

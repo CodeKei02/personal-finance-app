@@ -3,10 +3,8 @@ import { Modal } from "@/features/shared/components/modals/Modal";
 import { ProgressBar } from "@/features/shared/components/textElements/ProgressBar";
 import { Input, Button } from "@/components";
 import { colors } from "@/styles/colors";
-import { updatePotItem } from "@/store/slices/potsSlice";
+import { usePotStore } from "@/store/usePotStore";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
 
 interface Pot {
   id: string;
@@ -42,7 +40,7 @@ export const PotActionModal: React.FC<PotActionModalProps> = ({
   onClose,
   selectedPot,
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const updatePot = usePotStore((state) => state.updatePot);
   const initialValues: FormValues = { amount: 0 };
 
   const calculateNewAmount = (
@@ -65,15 +63,13 @@ export const PotActionModal: React.FC<PotActionModalProps> = ({
       amount: newAmount,
     };
 
-    dispatch(updatePotItem(updatedPot))
-      .unwrap()
-      .then(() => {
-        setTimeout(() => {
-          resetForm();
-          setSubmitting(false);
-          onClose();
-        }, 1000);
-      });
+    void updatePot(updatedPot).then(() => {
+      setTimeout(() => {
+        resetForm();
+        setSubmitting(false);
+        onClose();
+      }, 1000);
+    });
   };
 
   const getButtonText = (isSubmitting: boolean, action: string): string => {
