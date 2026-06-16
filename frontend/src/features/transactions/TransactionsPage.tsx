@@ -41,25 +41,38 @@ export const TransactionsPage = () => {
   const total = useTransactionStore((state) => state.total);
   const page = useTransactionStore((state) => state.page);
   const totalPages = useTransactionStore((state) => state.totalPages);
-  const selectedCategory = useTransactionStore((state) => state.selectedCategory);
+  const selectedCategory = useTransactionStore(
+    (state) => state.selectedCategory,
+  );
   const selectedSearch = useTransactionStore((state) => state.selectedSearch);
   const sortBy = useTransactionStore((state) => state.sortBy);
   const setPage = useTransactionStore((state) => state.setPage);
-  const setSelectedCategory = useTransactionStore((state) => state.setSelectedCategory);
-  const setSelectedSearch = useTransactionStore((state) => state.setSelectedSearch);
+  const setSelectedCategory = useTransactionStore(
+    (state) => state.setSelectedCategory,
+  );
+  const setSelectedSearch = useTransactionStore(
+    (state) => state.setSelectedSearch,
+  );
   const setSortBy = useTransactionStore((state) => state.setSortBy);
-  const fetchTransactions = useTransactionStore((state) => state.fetchTransactions);
+  const fetchTransactions = useTransactionStore(
+    (state) => state.fetchTransactions,
+  );
 
   // Server-side pagination: refetch whenever the page, filters, or sort change.
   useEffect(() => {
     void fetchTransactions();
   }, [page, selectedCategory, selectedSearch, sortBy, fetchTransactions]);
 
-  const theader = ["Recipient/Sender", "Category", "Transaction Date", "Amount"];
+  const theader = [
+    "Recipient/Sender",
+    "Category",
+    "Transaction Date",
+    "Amount",
+  ];
 
   const handleDropdown = (
     show: boolean,
-    setShow: (status: boolean) => void
+    setShow: (status: boolean) => void,
   ): void => {
     setShow(!show);
   };
@@ -131,7 +144,11 @@ export const TransactionsPage = () => {
                   name="category"
                   placeholder="Select an option"
                   options={categories}
-                  dispatchAction={(value) => setSelectedCategory(value)}
+                  dispatchAction={(value) =>
+                    setSelectedCategory(
+                      typeof value === "string" ? value : String(value),
+                    )
+                  }
                 />
               }
             />
