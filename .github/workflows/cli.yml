@@ -8,7 +8,9 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-24.04
-
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/frontend
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -22,27 +24,17 @@ jobs:
       - name: Install dependencies
         run: |
           echo "::group::Install dependencies"
-          cd frontend
           pnpm install --frozen-lockfile
-          echo "::endgroup::"
-
-      - name: Lint
-        run: |
-          echo "::group::Lint"
-          cd frontend
-          pnpm lint
           echo "::endgroup::"
 
       - name: Test
         run: |
           echo "::group::Test"
-          cd frontend
           pnpm test
           echo "::endgroup::"
 
       - name: Build
         run: |
           echo "::group::Build"
-          cd frontend
           pnpm build
           echo "::endgroup::"
