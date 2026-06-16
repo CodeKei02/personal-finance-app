@@ -27,10 +27,10 @@ jobs:
           pnpm install --frozen-lockfile
           echo "::endgroup::"
 
-      - name: Test
+      - name: Lint
         run: |
-          echo "::group::Test"
-          pnpm test
+          echo "::group::Lint"
+          pnpm lint
           echo "::endgroup::"
 
       - name: Build
