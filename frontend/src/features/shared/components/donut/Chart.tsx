@@ -1,5 +1,11 @@
 import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  type Plugin,
+} from "chart.js";
 import { colors } from "@/styles/colors";
 import { ListItem } from "@/features/shared/components/textElements/types";
 import { Budget } from "@/features/budgets/types";
@@ -32,9 +38,9 @@ export const Chart: React.FC<ChartProps> = ({ items, transactions }) => {
     cutout: "70%",
   };
 
-  const centerTextPlugin = {
+  const centerTextPlugin: Plugin<"doughnut"> = {
     id: "centerText",
-    beforeDraw: (chart: any) => {
+    beforeDraw: (chart) => {
       const { width } = chart;
       const { height } = chart;
       const ctx = chart.ctx;
@@ -45,8 +51,8 @@ export const Chart: React.FC<ChartProps> = ({ items, transactions }) => {
         0
       );
       const totalSpent = transactions.reduce(
-        (acc: number, transaction: any) => acc + parseFloat(transaction.amount),
-        0
+        (acc: number, transaction) => acc + Number(transaction.amount),
+        0,
       );
 
       ctx.font = "bold 2rem Manrope";

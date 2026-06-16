@@ -20,6 +20,7 @@ import { useCurrencyStore } from "@/store/useCurrencyStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { CurrencySelector } from "@/features/shared/components/currency/CurrencySelector";
 import { api } from "@/lib/api";
+import type { Pot } from "@/features/pots/types";
 
 export const OverviewPage = () => {
   const pots = usePotStore((state) => state.items);
@@ -48,7 +49,7 @@ export const OverviewPage = () => {
     .reduce((acc, transaction) => acc + Number(transaction.amount), 0);
 
   const currentBalance = totalIncome + totalExpenses;
-  const totalSaved = pots.reduce((acc: number, item: any) => acc + item.amount, 0);
+  const totalSaved = pots.reduce((acc: number, item: Pot) => acc + item.amount, 0);
 
   const details: OverviewDetails[] = [
     {
@@ -150,7 +151,7 @@ export const OverviewPage = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 grid-rows-2 md:grid-cols-[repeat(2,200px)] lg:grid-cols-2 lg:gap-4 potsLegend">
-                  {pots.slice(0, 4).map((item: any) => (
+                  {pots.slice(0, 4).map((item: Pot) => (
                     <div
                       key={item.id}
                       className="border-l-[5px] my-2 [&_div]:ml-4"

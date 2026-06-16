@@ -1,4 +1,4 @@
-import { Form, FormikProps, Formik } from "formik";
+import { Form, FormikProps, Formik, type FormikHelpers } from "formik";
 import { Modal } from "@/features/shared/components/modals/Modal";
 import { ProgressBar } from "@/features/shared/components/textElements/ProgressBar";
 import { Input, Button } from "@/components";
@@ -54,7 +54,10 @@ export const PotActionModal: React.FC<PotActionModalProps> = ({
       : 0;
   };
 
-  const handleFormSubmit = (values: any, { resetForm, setSubmitting }: any) => {
+  const handleFormSubmit = (
+    values: FormValues,
+    { resetForm, setSubmitting }: FormikHelpers<FormValues>,
+  ) => {
     const newAmount = calculateNewAmount(selectedPot.amount, values.amount);
 
     const updatedPot = {

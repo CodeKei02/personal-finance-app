@@ -7,6 +7,8 @@ import { PotActionModal } from "./PotActionModal";
 import { usePotStore } from "@/store/usePotStore";
 import { DropdownEditDelete } from "@/features/shared/components/dropdown/DropdownEditDelete";
 import { Motion } from "@/features/shared/components/textElements/Motion";
+import type { FormInput } from "@/features/shared/components/modals/type";
+import type { ObjectSchema } from "yup";
 
 interface ItemsInput {
   id: string;
@@ -17,8 +19,8 @@ interface ItemsInput {
 }
 
 interface FormPot {
-  pots: ItemsInput[] | any;
-  validationSchema: any;
+  pots: FormInput[];
+  validationSchema: ObjectSchema<Record<string, unknown>>;
 }
 
 export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
@@ -30,9 +32,9 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
     null
   );
   const [action, setAction] = useState<"add" | "withdraw" | null>(null);
-  const [isOpenDropdown, setIsOpenDropdown] = useState(null);
+  const [isOpenDropdown, setIsOpenDropdown] = useState<string | null>(null);
 
-  const handleDropdownToggle = (id: any) => {
+  const handleDropdownToggle = (id: string) => {
     setIsOpenDropdown((prevId) => (prevId === id ? null : id));
   };
 
@@ -45,8 +47,8 @@ export const PotsCard: React.FC<FormPot> = ({ pots, validationSchema }) => {
     <>
       {items.length > 0 ? (
         <div className="lg:grid lg:grid-cols-2 lg:gap-4 PotsCard">
-          {items.map((item: any) => (
-            <Motion key={item.id} card={item} index={item.id}>
+          {items.map((item: ItemsInput, index: number) => (
+            <Motion key={item.id} card={item.id} index={index}>
               <div
                 key={item.id}
                 className="w-full bg-white p-6 my-6 relative rounded-lg shadow-[0px_4px_20px_rgba(0,0,0,0.1)] min-[670px]:my-4 min-[670px]:mr-14 min-[670px]:mt-0"

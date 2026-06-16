@@ -4,7 +4,7 @@ interface DropdownProps {
   text: string;
   items: string[];
   className?: string;
-  dispatchAction: (value: any) => any;
+  dispatchAction: (value: string) => void | Promise<void>;
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({

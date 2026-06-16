@@ -1,6 +1,7 @@
 import { Budget } from "@/features/budgets/types"
 import { Pot } from "@/features/pots/types"
 import { FormInput } from "@/features/shared/components/modals/type"
+import type { ObjectSchema } from "yup";
 
 export interface DropdownEditDeleteProps<T extends { id: string }> {
     method: string;
@@ -14,5 +15,5 @@ export interface DropdownEditDeleteProps<T extends { id: string }> {
     onDelete: (value: T) => void | Promise<void>;
     inputs: FormInput[];
     initialValues: Budget | Pot;
-    validationSchema: any;
+    validationSchema: ObjectSchema<Record<string, unknown>>;
 }

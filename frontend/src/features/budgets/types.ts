@@ -2,6 +2,7 @@ import type {
   FormInput,
   FormInputType,
 } from "@/features/shared/components/modals/type";
+import type { ObjectSchema } from "yup";
 
 export interface Budget {
   id: string;
@@ -21,5 +22,5 @@ export interface ItemsInput {
 
 export interface FormBudgets {
   budgets?: FormInput[];
-  validationSchema: any;
+  validationSchema: ObjectSchema<Record<string, unknown>>;
 }

@@ -1,4 +1,4 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, type FormikHelpers } from "formik";
 import { Input, Button, Error } from "@/components";
 import { Calendar } from "@/features/shared/components/calendar/Calendar";
 import { Modal } from "@/features/shared/components/modals/Modal";
@@ -7,7 +7,10 @@ import { useState, useRef } from "react";
 import { useClickOutside } from "@/features/shared/hooks/useClickOutside";
 import * as Yup from "yup";
 import { useUiStore } from "@/store/useUiStore";
-import { useTransactionStore } from "@/store/useTransactionStore";
+import {
+  useTransactionStore,
+  type NewTransactionInput,
+} from "@/store/useTransactionStore";
 
 interface MyFormValues {
   name: string;
@@ -108,11 +111,14 @@ export const TransactionModal = () => {
   const closeModal = useUiStore((state) => state.closeModal);
   const addTransaction = useTransactionStore((state) => state.addTransaction);
 
-  const handleFormSubmit = (values: any, { resetForm, setSubmitting }: any) => {
+  const handleFormSubmit = (
+    values: MyFormValues,
+    { resetForm, setSubmitting }: FormikHelpers<MyFormValues>,
+  ) => {
     const isExpense = values.transactiontype === "expense";
     const normalizedAmount = Math.abs(Number(values.amount)) * (isExpense ? -1 : 1);
 
-    const newTransaction = {
+    const newTransaction: NewTransactionInput = {
       name: values.name,
       amount: normalizedAmount,
       category: values.category,

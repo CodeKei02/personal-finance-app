@@ -22,7 +22,7 @@ interface CustomInputProps {
   placeholder?: string;
   options?: string[];
   onChange?: (value: InputChangeValue) => void;
-  dispatchAction?: (value: any) => any;
+  dispatchAction?: (value: InputChangeValue) => void | Promise<void>;
   width?: string;
   border?: string;
   direction?: "row" | "column";

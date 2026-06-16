@@ -19,7 +19,7 @@ export const LegendContent: React.FC<LegendContentProps> = ({
   const alignClass = align === "center" ? "items-center" : align === "flex-end" ? "items-end" : "items-start";
 
   return (
-    <div className={`flex flex-col ${alignClass} min-[670px]:mt-0 min-[670px]:flex-grow-[0.5] legend`}>
+    <div className={`flex flex-col ${alignClass} min-[670px]:mt-0 min-[670px]:grow-[0.5] legend`}>
       {title && (
         <h2 className="self-center my-5 text-2xl font-black text-greyDark min-[670px]:self-start spending-summary">
           Spending Summary
@@ -41,7 +41,8 @@ export const LegendContent: React.FC<LegendContentProps> = ({
             <strong>
               {transactions
                 .filter(
-                  (transaction: any) => transaction.category === budget.category
+                  (transaction: ListItem) =>
+                    transaction.category === budget.category,
                 )
                 .reduce(
                   (acc, transaction) => acc + Number(transaction.amount),
